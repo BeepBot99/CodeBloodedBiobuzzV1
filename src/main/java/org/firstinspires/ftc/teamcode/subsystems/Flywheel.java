@@ -1,13 +1,15 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.utils.Context;
+import org.firstinspires.ftc.teamcode.util.Context;
 
 import static com.pedropathing.ivy.commands.Commands.infinite;
 
+@Config
 public class Flywheel {
     private final DcMotorEx motor;
     private final VoltageSensor voltageSensor;

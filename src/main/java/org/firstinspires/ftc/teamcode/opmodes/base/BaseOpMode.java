@@ -11,9 +11,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
-import org.firstinspires.ftc.teamcode.utils.Menu;
-import org.firstinspires.ftc.teamcode.utils.Alliance;
-import org.firstinspires.ftc.teamcode.utils.RobotDataStore;
+import org.firstinspires.ftc.teamcode.util.Menu;
+import org.firstinspires.ftc.teamcode.util.Alliance;
+import org.firstinspires.ftc.teamcode.util.RobotDataStore;
 
 import java.util.List;
 
