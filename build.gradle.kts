@@ -10,3 +10,10 @@ ftc {
         implementation(slothboard)
     }
 }
+
+dependencies {
+    implementation("com.pedropathing:revhub:3.0.1")
+    implementation("com.pedropathing:tuning:1.0.2")
+    implementation("com.pedropathing:ivy:1.0.0")
+    implementation("dev.frozenmilk.dairy:CachingHardware:1.0.0")
+}
