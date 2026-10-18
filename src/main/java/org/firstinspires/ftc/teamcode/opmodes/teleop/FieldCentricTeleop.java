@@ -1,16 +1,20 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.pedropathing.follower.ManualDrive;
+import com.pedropathing.math.Vector2D;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.control.LockController;
 import org.firstinspires.ftc.teamcode.opmodes.base.TeleOpMode;
 import org.firstinspires.ftc.teamcode.util.Alliance;
 
+import java.util.Vector;
+
 
 @Disabled
 @TeleOp
 public class FieldCentricTeleop extends TeleOpMode {
+    public static double SNAP_ANGLE = 15;
 
     // locks hold position independently for each axis
     LockController headingLock = new LockController(0.05, 0.05, 2, 0.1876, 0.0, true);
@@ -41,12 +45,29 @@ public class FieldCentricTeleop extends TeleOpMode {
         telemetry.addData("pose", follower.pose());
         telemetry.addData("velocity", follower.velocity().toVector2D().magnitude());
 
+        Vector2D snappedDrive = Vector2D.cartesian(
+                gamepad1.left_stick_x,
+                -gamepad1.left_stick_y).rotate(-follower.pose().heading());
+
+        double angle = Math.atan2(snappedDrive.y(), snappedDrive.x());
+        double nearestAxis = Math.rint(angle / (Math.PI / 2)) * (Math.PI / 2);
+
+        if (Math.abs(Math.atan2(
+                Math.sin(angle - nearestAxis),
+                Math.cos(angle - nearestAxis)
+        )) < Math.toRadians(SNAP_ANGLE)) {
+            snappedDrive = Vector2D.polar(
+                    snappedDrive.magnitude(),
+                    nearestAxis
+            );
+        }
+
         follower.manual(ManualDrive.fieldCentric(
-                    gamepad1.left_stick_x,
-                    -gamepad1.left_stick_y,
-                    -gamepad1.right_stick_x/3,
-                    follower.pose().heading(),
-                    alliance == Alliance.RED ? Math.PI : 0
+                snappedDrive.x(),
+                -snappedDrive.y(),
+                -gamepad1.right_stick_x,
+                follower.pose().heading(),
+                alliance == Alliance.RED ? Math.PI : 0
         ));
     }
 }
