@@ -65,7 +65,7 @@ public class FieldCentricTeleop extends TeleOpMode {
         follower.manual(//ManualDrive.fieldCentric(
                 -snappedDrive.x(),
                 -snappedDrive.y(),
-                -gamepad1.right_stick_x,
+                -gamepad1.right_stick_x
 //                follower.pose().heading(),
 //                alliance == Alliance.RED ? Math.PI : 0
         );
