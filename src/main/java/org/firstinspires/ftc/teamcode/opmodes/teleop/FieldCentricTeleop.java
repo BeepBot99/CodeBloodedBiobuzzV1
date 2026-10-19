@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.util.Alliance;
 import java.util.Vector;
 
 
-@Disabled
 @TeleOp
 public class FieldCentricTeleop extends TeleOpMode {
     public static double SNAP_ANGLE = 15;
@@ -62,12 +61,12 @@ public class FieldCentricTeleop extends TeleOpMode {
             );
         }
 
-        follower.manual(ManualDrive.fieldCentric(
-                snappedDrive.x(),
+        follower.manual(
+                -snappedDrive.x(),
                 -snappedDrive.y(),
-                -gamepad1.right_stick_x,
-                follower.pose().heading(),
-                alliance == Alliance.RED ? Math.PI : 0
-        ));
+                -gamepad1.right_stick_x
+//                follower.pose().heading(),
+//                alliance == Alliance.RED ? Math.PI : 0
+        );
     }
 }
