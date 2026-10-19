@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.util.Alliance;
 import java.util.Vector;
 
 
-@Disabled
 @TeleOp
 public class FieldCentricTeleop extends TeleOpMode {
     public static double SNAP_ANGLE = 15;
