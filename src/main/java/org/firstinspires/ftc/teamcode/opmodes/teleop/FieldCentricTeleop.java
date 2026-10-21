@@ -44,9 +44,10 @@ public class FieldCentricTeleop extends TeleOpMode {
         telemetry.addData("pose", follower.pose());
         telemetry.addData("velocity", follower.velocity().toVector2D().magnitude());
 
+        double offset = alliance == Alliance.RED ? Math.PI : 0;
         Vector2D snappedDrive = Vector2D.cartesian(
                 gamepad1.left_stick_x,
-                -gamepad1.left_stick_y).rotate(-follower.pose().heading());
+                -gamepad1.left_stick_y).rotate(-follower.pose().heading() + offset);
 
         double angle = Math.atan2(snappedDrive.y(), snappedDrive.x());
         double nearestAxis = Math.rint(angle / (Math.PI / 2)) * (Math.PI / 2);
@@ -61,12 +62,10 @@ public class FieldCentricTeleop extends TeleOpMode {
             );
         }
 
-        follower.manual(//ManualDrive.fieldCentric(
-                -snappedDrive.x(),
+        follower.manual(
                 -snappedDrive.y(),
+                snappedDrive.x(),
                 -gamepad1.right_stick_x
-//                follower.pose().heading(),
-//                alliance == Alliance.RED ? Math.PI : 0
         );
     }
 }

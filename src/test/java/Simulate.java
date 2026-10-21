@@ -2,6 +2,7 @@ import org.codeblooded.ftcodesim.ascope.SeasonField;
 import org.codeblooded.ftcodesim.ascope.SourceType;
 import org.codeblooded.ftcodesim.ascope.boundaries.RobotGeometry;
 import org.codeblooded.ftcodesim.hardware.SimHardwareMap;
+import org.codeblooded.ftcodesim.hardware.devices.SimMotor;
 import org.codeblooded.ftcodesim.hardware.devices.SimOctoquad;
 import org.codeblooded.ftcodesim.hardware.drivetrain.SimulatedDrivetrain;
 import org.codeblooded.ftcodesim.hardware.drivetrain.SimulatedMecanum;
@@ -30,7 +31,7 @@ public class Simulate {
         config.maxAcceleration = 250;
         config.turnNaturalDeceleration = 2.5;
         config.maxTurnAccel = 10;
-        config.maxAngularVelocity = 5;
+        config.maxAngularVelocity = 8;
         config.field = SeasonField.BIOBUZZ;
 
         config.robotGeometry = new RobotGeometry(18, 18, 0, 0);
