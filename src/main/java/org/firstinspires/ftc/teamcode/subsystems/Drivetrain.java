@@ -46,6 +46,7 @@ public class Drivetrain {
                 snappedDrive.x(),
                 turn
         );
+        follower.update();
     }
 
     public Command periodic() {
