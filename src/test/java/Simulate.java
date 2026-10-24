@@ -3,6 +3,7 @@ import org.codeblooded.ftcodesim.ascope.SourceType;
 import org.codeblooded.ftcodesim.ascope.boundaries.RobotGeometry;
 import org.codeblooded.ftcodesim.hardware.SimHardwareMap;
 import org.codeblooded.ftcodesim.hardware.devices.SimMotor;
+import org.codeblooded.ftcodesim.hardware.devices.SimMotorConfig;
 import org.codeblooded.ftcodesim.hardware.devices.SimOctoquad;
 import org.codeblooded.ftcodesim.hardware.drivetrain.SimulatedDrivetrain;
 import org.codeblooded.ftcodesim.hardware.drivetrain.SimulatedMecanum;
@@ -44,6 +45,13 @@ public class Simulate {
         SimHardwareMap simHardwareMap = new SimHardwareMap();
         simHardwareMap.register(drivetrain);
         simHardwareMap.register("octoquad", new SimOctoquad(drivetrain));
+        simHardwareMap.register("lowerIntake", new SimMotor(SimMotorConfig.empty("lowerIntake")));
+        simHardwareMap.register("upperIntake", new SimMotor(SimMotorConfig.empty("upperIntake")));
+        simHardwareMap.register("flywheel", new SimMotor(SimMotorConfig.empty("flywheel")));
+        simHardwareMap.register("blocker", new SimServo());
+        simHardwareMap.register("corbicula1", new SimServo());
+        simHardwareMap.register("corbicula2", new SimServo());
+        simHardwareMap.register("intake", new SimMotor(SimMotorConfig.empty("intake")));
 
         SimConfig simConfig = new SimConfig();
         simConfig.gamepad1Keybinds = new DefaultKeybinds();

@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
 import gay.zharel.fateweaver.telemetry.Fate;
 import gay.zharel.fateweaver.telemetry.FateTable;
 import org.firstinspires.ftc.teamcode.util.Context;
@@ -18,7 +17,7 @@ public class Corbicula {
     private final Servo servo1;
     private final Servo servo2;
 
-    private Mode mode;
+    private Mode mode = Mode.UP;
     private final FateTable table = Fate.table("Corbicula");
 
     public Corbicula(Context context) {

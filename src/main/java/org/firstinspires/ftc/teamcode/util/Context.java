@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.util;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -38,7 +37,7 @@ public final class Context implements AutoCloseable {
     }
 
     public Servo servo(String name) {
-        return new CachingServo(hardwareMap.servo.get(name));
+        return new CachingServo(hardwareMap.get(Servo.class, name));
     }
 
     public DcMotorEx motor(String name) {

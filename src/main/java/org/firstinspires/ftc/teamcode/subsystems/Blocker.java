@@ -19,7 +19,7 @@ public class Blocker {
     private final Servo servo;
     private final FateTable table = Fate.table("Blocker");
 
-    private Mode mode;
+    private Mode mode = Mode.BLOCKED; // may move between transition
 
     public Blocker(Context context) {
         servo = context.servo("blocker");
