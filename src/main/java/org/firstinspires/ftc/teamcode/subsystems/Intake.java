@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.behaviors.ConflictBehavior;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import gay.zharel.fateweaver.telemetry.Fate;
 import gay.zharel.fateweaver.telemetry.FateTable;
@@ -14,9 +15,9 @@ import static com.pedropathing.ivy.commands.Commands.*;
 @Config
 public final class Intake {
     public static boolean logCurrent = false;
-    public static double onPower = -1;
+    public static double onPower = 1;
     public static double offPower = 0;
-    public static double reversePower = 1;
+    public static double reversePower = -1;
     public static double shortReverseTimeMs = 150;
     private final DcMotorEx lowerIntakeMotor;
     private final DcMotorEx upperIntakeMotor;
@@ -26,6 +27,9 @@ public final class Intake {
     public Intake(Context context) {
         lowerIntakeMotor = context.motor("lowerIntake");
         upperIntakeMotor = context.motor("upperIntake");
+
+        lowerIntakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        upperIntakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public Command on() {
