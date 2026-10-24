@@ -1,11 +1,11 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static com.pedropathing.ivy.commands.Commands.instant;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.behaviors.ConflictBehavior;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import gay.zharel.fateweaver.telemetry.Fate;
+import gay.zharel.fateweaver.telemetry.FateTable;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.util.Context;
 
@@ -20,27 +20,18 @@ public final class Intake {
     public static double shortReverseTimeMs = 150;
     private final DcMotorEx lowerIntakeMotor;
     private final DcMotorEx upperIntakeMotor;
-    private final Context context;
     private Mode mode = Mode.OFF;
+    private final FateTable table = Fate.table("Intake");
 
     public Intake(Context context) {
-        this.context = context;
         lowerIntakeMotor = context.motor("lowerIntake");
         upperIntakeMotor = context.motor("upperIntake");
     }
 
     public Command on() {
-        return instant(() -> mode = Mode.FULL_ON).requiring(lowerIntakeMotor);
+        return instant(() -> mode = Mode.ON).requiring(lowerIntakeMotor);
     }
 
-    // not sure how if/how we would separately use intake motors
-    public Command upperOn() {
-        return instant(() -> mode = Mode.UPPER_ON).requiring(upperIntakeMotor);
-    }
-
-    public Command lowerOn() {
-        return instant(() -> mode = Mode.LOWER_ON).requiring(lowerIntakeMotor);
-    }
 
     public Command off() {
         return instant(() -> mode = Mode.OFF).requiring(lowerIntakeMotor);
@@ -61,15 +52,9 @@ public final class Intake {
     public Command periodic() {
         return infinite(() -> {
             switch (mode) {
-                case FULL_ON:
+                case ON:
                     lowerIntakeMotor.setPower(onPower);
                     upperIntakeMotor.setPower(onPower);
-                    break;
-                case UPPER_ON:
-                    upperIntakeMotor.setPower(onPower);
-                    break;
-                case LOWER_ON:
-                    lowerIntakeMotor.setPower(onPower);
                     break;
                 case OFF:
                     lowerIntakeMotor.setPower(offPower);
@@ -81,12 +66,16 @@ public final class Intake {
                     break;
             }
 
+            table.log("Lower/Velocity", lowerIntakeMotor.getVelocity());
+            table.log("Upper/Velocity", upperIntakeMotor.getVelocity());
+            table.log("Lower/Power", lowerIntakeMotor.getPower());
+            table.log("Upper/Power", upperIntakeMotor.getPower());
+            table.log("Mode", mode);
+
             if (logCurrent) {
-                context.telemetry.addData("Intake/lower current", getCurrentLower());
-                context.telemetry.addData("Intake/upper current", getCurrentUpper());
+                table.log("Lower/Current", getCurrentLower());
+                table.log("Upper/Current", getCurrentUpper());
             }
-            context.telemetry.addData("Intake/velocity", lowerIntakeMotor.getVelocity());
-            context.telemetry.addData("Intake/power", lowerIntakeMotor.getPower());
         });
     }
 
@@ -99,9 +88,7 @@ public final class Intake {
     }
 
     enum Mode {
-        FULL_ON,
-        UPPER_ON,
-        LOWER_ON,
+        ON,
         OFF,
         REVERSE
     }
