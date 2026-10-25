@@ -15,6 +15,10 @@
             <goBILDA5202SeriesMotor name="upperIntake" port="0"/>
             <goBILDA5202SeriesMotor name="lowerIntake" port="1"/>
             <goBILDA5202SeriesMotor name="flywheel" port="2"/>
+            <RevTouchSensor name="pollenSensor4" port="0"/>
+            <RevTouchSensor name="pollenSensor3" port="1"/>
+            <RevTouchSensor name="pollenSensor2" port="2"/>
+            <RevTouchSensor name="pollenSensor1" port="3"/>
         </LynxModule>
     </LynxUsbDevice>
 </Robot>

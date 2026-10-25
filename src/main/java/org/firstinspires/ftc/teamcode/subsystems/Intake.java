@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
-import com.pedropathing.ivy.behaviors.ConflictBehavior;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import gay.zharel.fateweaver.telemetry.Fate;
@@ -11,89 +10,48 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.util.Context;
 
 import static com.pedropathing.ivy.commands.Commands.*;
+import static com.pedropathing.ivy.groups.Groups.sequential;
 
 @Config
 public final class Intake {
     public static boolean logCurrent = false;
-    public static double onPower = 1;
-    public static double offPower = 0;
-    public static double reversePower = -1;
-    public static double shortReverseTimeMs = 150;
-    private final DcMotorEx lowerIntakeMotor;
-    private final DcMotorEx upperIntakeMotor;
-    private Mode mode = Mode.OFF;
+
+    public final IntakeShaft lower;
+    public final IntakeShaft upper;
     private final FateTable table = Fate.table("Intake");
 
     public Intake(Context context) {
-        lowerIntakeMotor = context.motor("lowerIntake");
-        upperIntakeMotor = context.motor("upperIntake");
-
-        lowerIntakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        upperIntakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lower = new IntakeShaft(context.motor("lowerIntake"));
+        upper = new IntakeShaft(context.motor("upperIntake"));
     }
 
     public Command on() {
-        return instant(() -> mode = Mode.ON).requiring(lowerIntakeMotor);
+        return sequential(upper.on(), lower.on());
     }
 
-
     public Command off() {
-        return instant(() -> mode = Mode.OFF).requiring(lowerIntakeMotor);
+        return sequential(upper.off(), lower.off());
     }
 
     public Command reverse() {
-        return instant(() -> mode = Mode.REVERSE).requiring(lowerIntakeMotor);
-    }
-
-    public Command shortReverse() {
-        return reverse().then(waitMs(shortReverseTimeMs)).then(on()).setConflictBehavior(ConflictBehavior.OVERRIDE);
+        return sequential(upper.reverse(), lower.reverse());
     }
 
     public Command toggle() {
-        return conditional(() -> mode == Mode.OFF, on(), off());
+        return conditional(() -> upper.isOff() && lower.isOff(), on(), off());
     }
 
     public Command periodic() {
         return infinite(() -> {
-            switch (mode) {
-                case ON:
-                    lowerIntakeMotor.setPower(onPower);
-                    upperIntakeMotor.setPower(onPower);
-                    break;
-                case OFF:
-                    lowerIntakeMotor.setPower(offPower);
-                    upperIntakeMotor.setPower(offPower);
-                    break;
-                case REVERSE:
-                    lowerIntakeMotor.setPower(reversePower);
-                    upperIntakeMotor.setPower(reversePower);
-                    break;
-            }
-
-            table.log("Lower/Velocity", lowerIntakeMotor.getVelocity());
-            table.log("Upper/Velocity", upperIntakeMotor.getVelocity());
-            table.log("Lower/Power", lowerIntakeMotor.getPower());
-            table.log("Upper/Power", upperIntakeMotor.getPower());
-            table.log("Mode", mode);
+            table.log("Lower/Velocity", lower.motor.getVelocity());
+            table.log("Upper/Velocity", upper.motor.getVelocity());
+            table.log("Lower/Power", lower.motor.getPower());
+            table.log("Upper/Power", upper.motor.getPower());
 
             if (logCurrent) {
-                table.log("Lower/Current", getCurrentLower());
-                table.log("Upper/Current", getCurrentUpper());
+                table.log("Lower/Current", lower.getCurrent());
+                table.log("Upper/Current", upper.getCurrent());
             }
         });
-    }
-
-    public double getCurrentLower() {
-        return lowerIntakeMotor.getCurrent(CurrentUnit.AMPS);
-    }
-
-    public double getCurrentUpper() {
-        return upperIntakeMotor.getCurrent(CurrentUnit.AMPS);
-    }
-
-    enum Mode {
-        ON,
-        OFF,
-        REVERSE
     }
 }

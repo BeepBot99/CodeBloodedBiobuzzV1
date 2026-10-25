@@ -17,7 +17,7 @@ public class Corbicula {
     private final Servo servo1;
     private final Servo servo2;
 
-    private Mode mode = Mode.UP;
+    private Mode mode = Mode.UP; // may move between transition if gravity moves it
     private final FateTable table = Fate.table("Corbicula");
 
     public Corbicula(Context context) {

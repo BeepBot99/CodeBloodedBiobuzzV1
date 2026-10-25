@@ -47,7 +47,6 @@ public class Flywheel {
 
     public Command periodic() {
         return infinite(() -> {
-
             switch (mode) {
                 case OFF:
                     motor.setPower(0);
