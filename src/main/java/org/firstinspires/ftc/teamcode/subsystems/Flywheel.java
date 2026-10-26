@@ -13,8 +13,9 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 @Config
 public class Flywheel {
     public static double kP = 0.015;
-    public static double kV = 0.000364;
-    public static double kS = 0.05;
+    public static double kV = 0.000361;
+    public static double kS = 0.055608664045860845;
+
     public static boolean logCurrent = false;
     private final DcMotorEx motor;
     private final FateTable table = Fate.table("Flywheel");

@@ -27,14 +27,14 @@ public abstract class RobotOpMode extends OpMode {
         Scheduler.reset();
         context = new Context(this);
 
-        //drivetrain = new Drivetrain(context); // octoquad is giving errors
+        drivetrain = new Drivetrain(context);
         intake = new Intake(context);
         flywheel = new Flywheel(context);
         blocker = new Blocker(context);
         corbicula = new Corbicula(context);
 
         schedule(
-                //drivetrain.periodic(),
+                drivetrain.periodic(),
                 intake.periodic(),
                 flywheel.periodic(),
                 blocker.periodic(),
