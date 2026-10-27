@@ -13,35 +13,22 @@ import static com.pedropathing.ivy.commands.Commands.waitMs;
 @Config("Tuning")
 public class TuningTeleOp extends RobotOpMode {
     public static double flywheelTarget = 0;
-
-    public static double passiveUpperIntakePower = 0.25;
-
-    private RevTouchSensor pollenSensor4;
+    public static double upperIntakePower = 1;
+    public static double lowerIntakePower = 1;
 
     @Override
     public void init() {
         super.init();
-        //pollenSensor4 = hardwareMap.get(RevTouchSensor.class, "pollenSensor4");
     }
 
     @Override
     public void loop() {
         wrapLoop(() -> {
             drivetrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x);
-//
-//            boolean hasFirstPollen = !pollenSensor4.isPressed(); // sensor is reversed
 
-//            if (gamepad1.right_bumper && hasFirstPollen) {
-//                intake.upper.off().schedule();
-//                intake.lower.on().schedule();
-//            }
-//            else if (gamepad1.right_bumper && !hasFirstPollen) {
-//                intake.upper.setPower(passiveUpperIntakePower).schedule();
-//                intake.lower.on().schedule();
-//            }
-//            else intake.off().schedule();
             if (gamepad1.right_bumper) {
-                intake.on().schedule();
+                intake.upper.setPower(upperIntakePower).schedule();
+                intake.lower.setPower(lowerIntakePower).schedule();
             }
             else intake.off().schedule();
 
