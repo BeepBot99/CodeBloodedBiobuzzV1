@@ -1,24 +1,34 @@
 package org.firstinspires.ftc.teamcode.control;
 
 public class LockController {
-    double lockedTarget = 0;
-    boolean decelerating = false;
-    double lockingInputThreshold;
-    double maximumLockingVelocity;
-    double kP;
-    double kD;
-    double kQ;
-    boolean headingLock;
+    private double lockedTarget = 0;
+    private boolean decelerating = false;
+    private double lockingInputThreshold;
+    private double maximumLockingVelocity;
 
-    public LockController(double lockingInputThreshold, double maximumLockingVelocity, double kP, double kD, double kQ, boolean headingLock) {
-        this.lockingInputThreshold = lockingInputThreshold;
-        this.maximumLockingVelocity = maximumLockingVelocity;
-        this.kP = kP;
-        this.kD = kD;
-        this.kQ = kQ;
-        this.headingLock = headingLock;
+    private final boolean hasAngularError;
+    private final PredictiveController predictiveController;
+
+    /**
+     * Keeps track of a target locked position and outputs the power required to hold it.
+     * Releases the hold/lock when the input is above lockingInputThreshold updates the lock once maximumLockingVelocity is reached
+     */
+    public LockController(boolean hasAngularError) {
+        this.hasAngularError = hasAngularError;
+        this.predictiveController = new PredictiveController(0,0,0);
     }
 
+    public void setGains(double lockingInputThreshold, double maximumLockingVelocity, double kP, double kL, double kQ) {
+        this.lockingInputThreshold = lockingInputThreshold;
+        this.maximumLockingVelocity = maximumLockingVelocity;
+        predictiveController.setGains(kP, kL, kQ);
+    }
+
+    /**
+     * @param input desired motion from joystick
+     * @param current current position
+     * @param velocity current velocity
+     */
     public double getOutput(double input, double current, double velocity) {
         if (Math.abs(input) > lockingInputThreshold) {
             decelerating = true;
@@ -29,16 +39,12 @@ public class LockController {
             return 0;
         } else if (decelerating) {
             return 0;
-        } else { // heading lock
+        } else {
             double error = lockedTarget - current;
-            if (headingLock) {
+            if (hasAngularError) {
                 error = angleWrap(error);
             }
-           // double kS = (Math.signum(error) * 0.625) / voltageSensor.getVoltage();
-            return kP * (error - velocity * kD - velocity * velocity * kQ);
-//            if (Math.abs(turn) <= Math.abs(kS) + 0.01) {
-//                turn = 0;
- //           }
+            return predictiveController.getOutput(error, velocity);
         }
     }
 
