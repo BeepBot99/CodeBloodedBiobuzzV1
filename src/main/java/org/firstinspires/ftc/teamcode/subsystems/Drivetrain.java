@@ -75,7 +75,7 @@ public class Drivetrain {
         double radiansToNearestAxis = Math.abs(Math.atan2(
                 Math.sin(angle - nearestAxis),
                 Math.cos(angle - nearestAxis)
-        );
+        ));
 
         if (radiansToNearestAxis < Math.toRadians(snapAngle)) {
             snappedDrive = Vector2D.polar(
