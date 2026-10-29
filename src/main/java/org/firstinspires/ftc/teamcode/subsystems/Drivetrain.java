@@ -72,11 +72,12 @@ public class Drivetrain {
 
         double angle = Math.atan2(snappedDrive.y(), snappedDrive.x());
         double nearestAxis = Math.rint(angle / (Math.PI / 2)) * (Math.PI / 2);
-
-        if (Math.abs(Math.atan2(
+        double radiansToNearestAxis = Math.abs(Math.atan2(
                 Math.sin(angle - nearestAxis),
                 Math.cos(angle - nearestAxis)
-        )) < Math.toRadians(snapAngle)) {
+        );
+
+        if (radiansToNearestAxis < Math.toRadians(snapAngle)) {
             snappedDrive = Vector2D.polar(
                     snappedDrive.magnitude(),
                     nearestAxis
