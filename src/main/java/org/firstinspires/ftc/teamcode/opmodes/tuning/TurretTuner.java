@@ -16,7 +16,7 @@ import static com.pedropathing.utils.Utils.quadraticFit;
 
 @TeleOp(name = "Turret Braking Tuner", group = "Tuning")
 @Config
-class TurretTuner extends LinearOpMode { // is linear opmode cuz copied from pedro tuner
+public class TurretTuner extends LinearOpMode { // is linear opmode cuz copied from pedro tuner
     private final FateTable table = Fate.table("Turret");
 
     public static double accelTime = 2;
