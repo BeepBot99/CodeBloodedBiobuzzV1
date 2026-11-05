@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.control;
 
 public class PredictiveController {
-    double kP;
-    double kL;
-    double kQ;
+    public double kP;
+    public double kL;
+    public double kQ;
 
     public PredictiveController(double kP, double kLinear, double kQuadratic) {
         this.kP = kP;

@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.control;
 public class LockController {
     private double lockedTarget = 0;
     private boolean decelerating = false;
-    private double lockingInputThreshold;
-    private double maximumLockingVelocity;
+    public double lockingInputThreshold;
+    public double maximumLockingVelocity;
 
     private final boolean hasAngularError;
     private final PredictiveController predictiveController;
@@ -13,15 +13,11 @@ public class LockController {
      * Keeps track of a target locked position and outputs the power required to hold it.
      * Releases the hold/lock when the input is above lockingInputThreshold updates the lock once maximumLockingVelocity is reached
      */
-    public LockController(boolean hasAngularError) {
+    public LockController(double kP, double kL, double kQ, double lockingInputThreshold, double maximumLockingVelocity, boolean hasAngularError) {
         this.hasAngularError = hasAngularError;
-        this.predictiveController = new PredictiveController(0,0,0);
-    }
-
-    public void setGains(double lockingInputThreshold, double maximumLockingVelocity, double kP, double kL, double kQ) {
         this.lockingInputThreshold = lockingInputThreshold;
         this.maximumLockingVelocity = maximumLockingVelocity;
-        predictiveController.setGains(kP, kL, kQ);
+        this.predictiveController = new PredictiveController(kP, kL, kQ);
     }
 
     /**
