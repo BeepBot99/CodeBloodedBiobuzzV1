@@ -3,13 +3,11 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoController;
-import gay.zharel.fateweaver.telemetry.Fate;
-import gay.zharel.fateweaver.telemetry.FateTable;
+import dev.nextftc.telemetry.Telemetry;
+import dev.nextftc.telemetry.TelemetryTable;
 import org.firstinspires.ftc.teamcode.util.Context;
 
 import static com.pedropathing.ivy.commands.Commands.infinite;
-import static com.pedropathing.ivy.commands.Commands.instant;
 
 @Config
 public class Blocker {
@@ -17,7 +15,7 @@ public class Blocker {
     public static double unblockPosition = 0.217;
 
     private final Servo servo;
-    private final FateTable table = Fate.table("Blocker");
+    private final TelemetryTable table = Telemetry.table("Blocker");
 
     private Mode mode = Mode.BLOCKED; // may move between transition
 

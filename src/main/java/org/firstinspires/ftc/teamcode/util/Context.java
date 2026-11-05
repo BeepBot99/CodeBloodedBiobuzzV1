@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.util;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -11,28 +9,23 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
 import dev.frozenmilk.dairy.cachinghardware.CachingServo;
-import gay.zharel.fateweaver.flight.FtcTelemetryBackend;
-import gay.zharel.fateweaver.telemetry.Fate;
-import gay.zharel.fateweaver.telemetry.FateBackend;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import dev.nextftc.telemetry.Telemetry;
+import dev.nextftc.telemetry.TelemetryBackend;
+import dev.nextftc.telemetry.ftc.DriverStationBackend;
 
 @Config("Settings")
 public final class Context implements AutoCloseable {
     public final HardwareMap hardwareMap;
-    public final Telemetry telemetry;
-    private final FateBackend telemetryBackend;
+    private final TelemetryBackend dashboardBackend;
 
     public Context(OpMode opMode) {
         hardwareMap = opMode.hardwareMap;
 
-        telemetry = new MultipleTelemetry(
-                opMode.telemetry,
-                FtcDashboard.getInstance().getTelemetry()
-        );
+        dashboardBackend = new DriverStationBackend(FtcDashboard.getInstance().getTelemetry());
 
-        telemetryBackend = new FtcTelemetryBackend(telemetry);
-        Fate.getRegistry().register(telemetryBackend);
+        Telemetry.getRegistry().register(dashboardBackend);
     }
+
     public VoltageSensor voltageSensor() {
         return hardwareMap.voltageSensor.iterator().next();
     }
@@ -47,6 +40,6 @@ public final class Context implements AutoCloseable {
 
     @Override
     public void close() {
-        Fate.getRegistry().unregister(telemetryBackend);
+        Telemetry.getRegistry().unregister(dashboardBackend);
     }
 }

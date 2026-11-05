@@ -3,14 +3,14 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.pedropathing.ivy.Command;
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.hardware.AnalogInput;
-import gay.zharel.fateweaver.telemetry.Fate;
-import gay.zharel.fateweaver.telemetry.FateTable;
+import dev.nextftc.telemetry.Telemetry;
+import dev.nextftc.telemetry.TelemetryTable;
 import org.firstinspires.ftc.teamcode.util.Context;
 
 import static com.pedropathing.ivy.commands.Commands.infinite;
 
 public class Sensors {
-    private final FateTable table = Fate.table("Sensors");
+    private final TelemetryTable table = Telemetry.table("Sensors");
 
     private final RevTouchSensor pollenSensor1;
     private final RevTouchSensor pollenSensor4;
