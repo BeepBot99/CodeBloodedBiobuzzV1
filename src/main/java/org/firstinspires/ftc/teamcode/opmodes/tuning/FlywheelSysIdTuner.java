@@ -1,12 +1,11 @@
-
 package org.firstinspires.ftc.teamcode.opmodes.tuning;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import gay.zharel.fateweaver.telemetry.Fate;
-import gay.zharel.fateweaver.telemetry.FateTable;
+import dev.nextftc.telemetry.Telemetry;
+import dev.nextftc.telemetry.TelemetryTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class FlywheelSysIdTuner extends OpMode {
     public static int SAMPLES_PER_STEP = 10;
     public static double SAMPLE_INTERVAL_SECONDS = 0.05;
 
-    private final FateTable table = Fate.table("Flywheel SysId Tuner");
+    private final TelemetryTable table = Telemetry.table("Flywheel SysId Tuner");
 
     private final List<Double> velocities = new ArrayList<>();
     private final List<Double> powers = new ArrayList<>();
@@ -40,6 +39,63 @@ public class FlywheelSysIdTuner extends OpMode {
     private int stepSamples;
     private boolean settling;
     private boolean finished;
+
+    private static double[] linearRegression(
+            List<Double> xValues,
+            List<Double> yValues
+    ) {
+        int n = xValues.size();
+
+        double meanX = 0;
+        double meanY = 0;
+
+        for (int i = 0; i < n; i++) {
+            meanX += xValues.get(i);
+            meanY += yValues.get(i);
+        }
+
+        meanX /= n;
+        meanY /= n;
+
+        double numerator = 0;
+        double denominator = 0;
+
+        for (int i = 0; i < n; i++) {
+            double dx = xValues.get(i) - meanX;
+            double dy = yValues.get(i) - meanY;
+
+            numerator += dx * dy;
+            denominator += dx * dx;
+        }
+
+        if (denominator == 0) {
+            return new double[]{
+                    Double.NaN, Double.NaN, Double.NaN
+            };
+        }
+
+        double kV = numerator / denominator;
+        double kS = meanY - kV * meanX;
+
+        double residualSum = 0;
+        double totalSum = 0;
+
+        for (int i = 0; i < n; i++) {
+            double predicted = kS + kV * xValues.get(i);
+            double residual = yValues.get(i) - predicted;
+
+            residualSum += residual * residual;
+
+            double deviation = yValues.get(i) - meanY;
+            totalSum += deviation * deviation;
+        }
+
+        double rSquared = totalSum == 0
+                ? Double.NaN
+                : 1.0 - residualSum / totalSum;
+
+        return new double[]{kS, kV, rSquared};
+    }
 
     @Override
     public void init() {
@@ -168,63 +224,6 @@ public class FlywheelSysIdTuner extends OpMode {
         } else {
             table.log("Status", "Insufficient Data");
         }
-    }
-
-    private static double[] linearRegression(
-            List<Double> xValues,
-            List<Double> yValues
-    ) {
-        int n = xValues.size();
-
-        double meanX = 0;
-        double meanY = 0;
-
-        for (int i = 0; i < n; i++) {
-            meanX += xValues.get(i);
-            meanY += yValues.get(i);
-        }
-
-        meanX /= n;
-        meanY /= n;
-
-        double numerator = 0;
-        double denominator = 0;
-
-        for (int i = 0; i < n; i++) {
-            double dx = xValues.get(i) - meanX;
-            double dy = yValues.get(i) - meanY;
-
-            numerator += dx * dy;
-            denominator += dx * dx;
-        }
-
-        if (denominator == 0) {
-            return new double[] {
-                    Double.NaN, Double.NaN, Double.NaN
-            };
-        }
-
-        double kV = numerator / denominator;
-        double kS = meanY - kV * meanX;
-
-        double residualSum = 0;
-        double totalSum = 0;
-
-        for (int i = 0; i < n; i++) {
-            double predicted = kS + kV * xValues.get(i);
-            double residual = yValues.get(i) - predicted;
-
-            residualSum += residual * residual;
-
-            double deviation = yValues.get(i) - meanY;
-            totalSum += deviation * deviation;
-        }
-
-        double rSquared = totalSum == 0
-                ? Double.NaN
-                : 1.0 - residualSum / totalSum;
-
-        return new double[] {kS, kV, rSquared};
     }
 
     @Override

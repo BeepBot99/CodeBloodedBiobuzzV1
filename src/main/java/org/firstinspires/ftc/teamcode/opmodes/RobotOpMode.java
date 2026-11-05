@@ -4,7 +4,8 @@ import com.pedropathing.ivy.Scheduler;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import gay.zharel.fateweaver.telemetry.Fate;
+import dev.nextftc.telemetry.Telemetry;
+import dev.nextftc.telemetry.ftc.FtcTelemetry;
 import org.firstinspires.ftc.teamcode.subsystems.*;
 import org.firstinspires.ftc.teamcode.util.Context;
 
@@ -50,22 +51,22 @@ public abstract class RobotOpMode extends OpMode {
 
     @Override
     public void init_loop() {
-        Fate.log("Robot/Loop/Time (ms)", loopTimer.milliseconds());
+        Telemetry.log("Robot/Loop/Time (ms)", loopTimer.milliseconds());
         loopTimer.reset();
 
         Scheduler.execute();
-        context.telemetry.update();
+        FtcTelemetry.update();
     }
 
     protected final void wrapLoop(Runnable runnable) {
-        Fate.log("Robot/Loop/Time (ms)", loopTimer.milliseconds());
+        Telemetry.log("Robot/Loop/Time (ms)", loopTimer.milliseconds());
         loopTimer.reset();
         hubs.forEach(LynxModule::clearBulkCache);
 
         runnable.run();
 
         Scheduler.execute();
-        context.telemetry.update();
+        FtcTelemetry.update();
     }
 
     @Override

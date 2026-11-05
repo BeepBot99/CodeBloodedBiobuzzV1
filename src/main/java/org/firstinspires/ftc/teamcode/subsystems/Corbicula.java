@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.hardware.Servo;
-import gay.zharel.fateweaver.telemetry.Fate;
-import gay.zharel.fateweaver.telemetry.FateTable;
+import dev.nextftc.telemetry.Telemetry;
+import dev.nextftc.telemetry.TelemetryTable;
 import org.firstinspires.ftc.teamcode.util.Context;
 
 import static com.pedropathing.ivy.commands.Commands.infinite;
@@ -16,9 +16,8 @@ public class Corbicula {
 
     private final Servo servo1;
     private final Servo servo2;
-
+    private final TelemetryTable table = Telemetry.table("Corbicula");
     private Mode mode = Mode.UP; // may move between transition if gravity moves it
-    private final FateTable table = Fate.table("Corbicula");
 
     public Corbicula(Context context) {
         this.servo1 = context.servo("corbicula1");

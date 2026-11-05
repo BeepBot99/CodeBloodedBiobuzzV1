@@ -2,14 +2,12 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import gay.zharel.fateweaver.telemetry.Fate;
-import gay.zharel.fateweaver.telemetry.FateTable;
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import dev.nextftc.telemetry.Telemetry;
+import dev.nextftc.telemetry.TelemetryTable;
 import org.firstinspires.ftc.teamcode.util.Context;
 
-import static com.pedropathing.ivy.commands.Commands.*;
+import static com.pedropathing.ivy.commands.Commands.conditional;
+import static com.pedropathing.ivy.commands.Commands.infinite;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 
 @Config
@@ -18,7 +16,7 @@ public final class Intake {
 
     public final IntakeShaft lower;
     public final IntakeShaft upper;
-    private final FateTable table = Fate.table("Intake");
+    private final TelemetryTable table = Telemetry.table("Intake");
 
     public Intake(Context context) {
         lower = new IntakeShaft(context.motor("lowerIntake"));

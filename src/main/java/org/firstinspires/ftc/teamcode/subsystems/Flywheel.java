@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import gay.zharel.fateweaver.telemetry.Fate;
-import gay.zharel.fateweaver.telemetry.FateTable;
+import dev.nextftc.telemetry.Telemetry;
+import dev.nextftc.telemetry.TelemetryTable;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.util.Context;
 
@@ -18,7 +18,7 @@ public class Flywheel {
 
     public static boolean logCurrent = false;
     private final DcMotorEx motor;
-    private final FateTable table = Fate.table("Flywheel");
+    private final TelemetryTable table = Telemetry.table("Flywheel");
     private double target = 0;
     private Mode mode = Mode.OFF;
 
