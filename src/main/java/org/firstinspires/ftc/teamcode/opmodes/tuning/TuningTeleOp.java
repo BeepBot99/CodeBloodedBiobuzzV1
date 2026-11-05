@@ -27,16 +27,15 @@ public class TuningTeleOp extends RobotOpMode {
             drivetrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x);
 
             if (gamepad1.right_bumper) {
-                intake.upper.setPower(upperIntakePower).schedule();
                 intake.lower.setPower(lowerIntakePower).schedule();
             }
-            else intake.off().schedule();
+            else intake.lower.off().schedule();
 
             if (gamepad1.leftBumperWasPressed()) flywheel.toggle();
             flywheel.setTarget(flywheelTarget);
 
-            if (gamepad1.right_trigger_pressed) blocker.unblock();
-            else blocker.block();
+            if (gamepad1.right_trigger_pressed) intake.upper.on().schedule();
+            else intake.upper.off().schedule();
 
             if (gamepad1.left_trigger_pressed) corbicula.down();
             else corbicula.up();
