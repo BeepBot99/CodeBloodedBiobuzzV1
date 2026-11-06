@@ -34,7 +34,7 @@ public class Flywheel {
         mode = Mode.VELOCITY;
     }
 
-    public void toggle() { // why are these not instants but intake are?
+    public void toggle() {
         mode = mode == Mode.OFF ? Mode.VELOCITY : Mode.OFF;
     }
 

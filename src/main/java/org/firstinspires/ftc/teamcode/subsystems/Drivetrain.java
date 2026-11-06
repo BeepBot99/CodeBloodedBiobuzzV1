@@ -27,6 +27,8 @@ public class Drivetrain {
     }
 
     public void drive(double forward, double strafe, double turn) {
+        turn = turn * turn * turn;
+
         forward = xLock.getOutput(forward, follower.pose().x(), follower.velocity().vx);
         strafe = yLock.getOutput(strafe, follower.pose().y(), follower.velocity().vy);
         turn = headingLock.getOutput(turn, follower.pose().heading(), follower.velocity().omega);

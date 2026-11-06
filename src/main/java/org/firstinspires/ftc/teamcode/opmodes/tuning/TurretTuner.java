@@ -15,7 +15,8 @@ import java.util.List;
 
 import static com.pedropathing.utils.Utils.quadraticFit;
 
-@Utility(name = "Turret Braking Tuner")
+@Utility(name = "Automatic Turret Tuner")
+@Config("Automatic Turret Tuner")
 public class TurretTuner extends LinearOpMode { // is linear opmode cuz copied from pedro tuner
     public static double accelTime = 2;
     public static int trials = 12;
@@ -68,10 +69,10 @@ public class TurretTuner extends LinearOpMode { // is linear opmode cuz copied f
         timer.reset();
 
         while (state != State.DONE && opModeIsActive()) {
-            int currentHeading = motor.getCurrentPosition();
-            double currentVelocity = motor.getVelocity();
+            double currentHeading = (double) motor.getCurrentPosition() / 8192/(38.0/120.0);
+            double currentVelocity = motor.getVelocity() / 8192/(38.0/120.0);
 
-            table.log("Heading", currentHeading);
+            table.log("Position", currentHeading);
             table.log("Velocity", currentVelocity);
 
             int direction = (iteration % 2 == 0) ? 1 : -1;

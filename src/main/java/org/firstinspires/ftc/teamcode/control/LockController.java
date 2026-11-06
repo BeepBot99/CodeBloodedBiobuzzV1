@@ -5,6 +5,7 @@ public class LockController {
     private boolean decelerating = false;
     public double lockingInputThreshold;
     public double maximumLockingVelocity;
+    public boolean enabled = false;
 
     private final boolean hasAngularError;
     private final PredictiveController predictiveController;
@@ -26,6 +27,10 @@ public class LockController {
      * @param velocity current velocity
      */
     public double getOutput(double input, double current, double velocity) {
+        if (!enabled) {
+            return input;
+        }
+
         if (Math.abs(input) > lockingInputThreshold) {
             decelerating = true;
             return input;

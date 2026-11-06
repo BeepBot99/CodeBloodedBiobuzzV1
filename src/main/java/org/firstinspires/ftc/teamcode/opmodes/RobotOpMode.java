@@ -14,7 +14,7 @@ import java.util.List;
 import static com.pedropathing.ivy.Scheduler.schedule;
 
 public abstract class RobotOpMode extends OpMode {
-    private final ElapsedTime loopTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+    protected final ElapsedTime loopTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     protected Context context;
     protected Drivetrain drivetrain;
     protected Intake intake;
@@ -28,7 +28,7 @@ public abstract class RobotOpMode extends OpMode {
     @Override
     public void init() {
         Scheduler.reset();
-        context = new Context(this);
+        context = new Context(this, loopTimer);
 
         drivetrain = new Drivetrain(context);
         intake = new Intake(context);

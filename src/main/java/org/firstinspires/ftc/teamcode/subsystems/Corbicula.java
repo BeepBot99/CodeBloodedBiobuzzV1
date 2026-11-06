@@ -37,7 +37,6 @@ public class Corbicula {
         mode = Mode.UP;
     }
 
-
     public Command periodic() {
         return infinite(() -> {
             switch (mode) {

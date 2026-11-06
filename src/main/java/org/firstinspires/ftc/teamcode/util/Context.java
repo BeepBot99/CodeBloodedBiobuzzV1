@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import dev.frozenmilk.dairy.cachinghardware.CachingDcMotorEx;
 import dev.frozenmilk.dairy.cachinghardware.CachingServo;
 import dev.nextftc.telemetry.Telemetry;
@@ -16,10 +17,12 @@ import dev.nextftc.telemetry.ftc.DriverStationBackend;
 @Config("Settings")
 public final class Context implements AutoCloseable {
     public final HardwareMap hardwareMap;
+    public final ElapsedTime loopTimer;
     private final TelemetryBackend dashboardBackend;
 
-    public Context(OpMode opMode) {
+    public Context(OpMode opMode, ElapsedTime loopTimer) {
         hardwareMap = opMode.hardwareMap;
+        this.loopTimer = loopTimer;
 
         dashboardBackend = new DriverStationBackend(FtcDashboard.getInstance().getTelemetry());
 

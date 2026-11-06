@@ -14,10 +14,4 @@ public class PredictiveController {
     public double getOutput(double error, double velocity) {
         return kP * (error - velocity * kL - velocity * velocity * kQ);
     }
-
-    public void setGains(double kP, double kL, double kQ) {
-        this.kP = kP;
-        this.kL = kL;
-        this.kQ = kQ;
-    }
 }

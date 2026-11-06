@@ -11,6 +11,7 @@ import com.pedropathing.revhub.drivetrains.MecanumConfig;
 import com.pedropathing.revhub.localizers.OctoQuadConfig;
 import com.pedropathing.revhub.localizers.OctoQuadLocalizer;
 import com.qualcomm.hardware.digitalchickenlabs.OctoQuad;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -67,7 +68,7 @@ public class Constants {
         c.globalDistanceUnit.set(DistanceUnit.INCH);
         c.offsetUnits.set(DistanceUnit.INCH);
         c.encoderResolutionUnit.set(DistanceUnit.MM);
-        c.ticksPerUnit.set(37.25);
+        c.ticksPerUnit.set(2000 / (Math.PI * 32));
         c.i2cRecoveryMode.set(OctoQuad.I2cRecoveryMode.MODE_1_PERIPH_RST_ON_FRAME_ERR);
         c.headingScalar.set(1.0173443763967929);
     });

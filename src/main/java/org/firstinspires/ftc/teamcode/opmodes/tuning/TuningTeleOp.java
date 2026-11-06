@@ -37,7 +37,7 @@ public class TuningTeleOp extends RobotOpMode {
             if (gamepad1.left_trigger_pressed) corbicula.down();
             else corbicula.up();
 
-            if (gamepad1.triangleWasPressed()) turret.toggle().execute();
+            if (gamepad1.triangleWasPressed()) turret.toggle();
             turret.setTargetDegrees(turretDegrees);
         });
     }

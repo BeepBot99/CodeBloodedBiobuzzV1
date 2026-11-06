@@ -5,6 +5,7 @@
             <goBILDA5202SeriesMotor name="upperIntake" port="0"/>
             <goBILDA5202SeriesMotor name="lowerIntake" port="1"/>
             <goBILDA5202SeriesMotor name="flywheel" port="2"/>
+            <goBILDA5202SeriesMotor name="turret" port="3"/>
             <Servo name="corbicula1" port="0"/>
             <Servo name="corbicula2" port="2"/>
             <Servo name="blocker" port="4"/>
@@ -14,7 +15,6 @@
             <RevTouchSensor name="pollenSensor4" port="2"/>
             <AnalogInput name="pollenSensor2" port="0"/>
             <AnalogInput name="pollenSensor3" port="2"/>
-            <goBILDA5202SeriesMotor name="turret" port="3"/>
         </LynxModule>
         <LynxModule name="Expansion Hub 2" port="2">
             <goBILDA5202SeriesMotor name="frontRight" port="0"/>

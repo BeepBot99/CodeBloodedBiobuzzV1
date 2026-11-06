@@ -1,27 +1,35 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.controllers.Controller;
 import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import dev.nextftc.telemetry.Telemetry;
 import dev.nextftc.telemetry.TelemetryTable;
-import org.firstinspires.ftc.teamcode.control.PredictiveController;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.util.Context;
 
 import static com.pedropathing.ivy.commands.Commands.*;
 
 @Config
 public final class Turret {
-    private static final double TICKS_PER_REVOLUTION = 28/((9.0/80.0)*(38.0/110.0));
+    private static final double TICKS_PER_REVOLUTION = 8192 / (38.0 / 120.0);
     public static double minimumAngleDegrees = -90;
     public static double incrementDegrees = 2.5;
-    public static PredictiveController controller = new PredictiveController(0,0,0);
-    private static double angleTransfer = 0;
+    public static double kP = 0.0365;
+    public static double kD = 0.0014;
+    public static boolean logCurrent = false;
+
+    private static double lastAngle = 0;
+
+    private final Controller controller = Controller.proportional(() -> kP).plus(Controller.derivative(() -> kD));
     private final DcMotorEx motor;
     private final Context context;
+    private final TelemetryTable table = Telemetry.table("Turret");
+
     private double targetDegrees = 0;
-    private Mode mode = Mode.OFF;
+    private Mode mode = Mode.POSITION;
     private double angleOffsetDegrees = 0;
 
     public Turret(Context context) {
@@ -33,7 +41,7 @@ public final class Turret {
     }
 
     public static void localize(double angle) {
-        angleTransfer = angle;
+        lastAngle = angle;
     }
 
     private double legalizeAngle(double angle) {
@@ -44,6 +52,10 @@ public final class Turret {
         return motor.getCurrentPosition() / TICKS_PER_REVOLUTION * 360;
     }
 
+    private double getRawDegreesPerSecond() {
+        return motor.getVelocity() / TICKS_PER_REVOLUTION * 360;
+    }
+
     public double getAngleDegrees() {
         return getRawAngleDegrees() + angleOffsetDegrees;
     }
@@ -52,12 +64,16 @@ public final class Turret {
         angleOffsetDegrees = angle - getRawAngleDegrees();
     }
 
-    public Command off() {
-        return instant(() -> mode = Mode.OFF);
+    public void off() {
+       mode = Mode.OFF;
     }
 
-    public Command on() {
-        return instant(() -> mode = Mode.POSITION);
+    public void on() {
+        mode = Mode.POSITION;
+    }
+
+    public void usePreviousStartingAngle() {
+        setAngleDegrees(lastAngle);
     }
 
     public double getTargetDegrees() {
@@ -80,35 +96,35 @@ public final class Turret {
         setAngleDegrees(angle);
     }
 
-    public void usePreviousStartingAngle() {
-        setAngleDegrees(angleTransfer);
-    }
-
-    public Command toggle() {
-        return conditional(() -> mode == Mode.OFF, on(), off());
+    public void toggle() {
+        mode = mode == Mode.OFF ? Mode.POSITION : Mode.OFF;
     }
     
     public Command periodic() {
         return infinite(() -> {
-            double error = targetDegrees - getAngleDegrees();
+            double current = getAngleDegrees();
+            double error = targetDegrees - current;
 
             switch (mode) {
                 case POSITION:
-                    motor.setPower(controller.getOutput(error, motor.getVelocity()));
+                    motor.setPower(-controller.calculate(targetDegrees, error));
                     break;
                 case OFF:
                     motor.setPower(0);
                     break;
             }
 
-            angleTransfer = getAngleDegrees();
+            lastAngle = current;
 
-            Telemetry.log("Turret/angle", getAngleDegrees());
-            Telemetry.log("Turret/target", targetDegrees);
-            Telemetry.log("Turret/error", error);
-            Telemetry.log("Turret/power", motor.getPower());
-            Telemetry.log("Turret/motor", motor.getVelocity());
-            Telemetry.log("Turret/mode", mode);
+            table.log("Angle", current);
+            table.log("Target", targetDegrees);
+            table.log("Error", error);
+            table.log("Power", motor.getPower());
+            table.log("Velocity", getRawDegreesPerSecond());
+            table.log("velocityFromPosition", (lastAngle - current) / context.loopTimer.seconds());
+            table.log("Mode", mode);
+
+            if (logCurrent) table.log("CurrentAMPS", motor.getCurrent(CurrentUnit.AMPS));
         });
     }
 

@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmodes.tuning;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Utility;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import dev.nextftc.telemetry.Telemetry;
 import dev.nextftc.telemetry.TelemetryTable;
@@ -11,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Config
-@TeleOp(name = "Flywheel SysId Tuner", group = "Tuning")
+@Utility(name = "Auto Flywheel SysId Tuner")
+@Disabled
 public class FlywheelSysIdTuner extends OpMode {
 
     public static double START_POWER = 0.1;
