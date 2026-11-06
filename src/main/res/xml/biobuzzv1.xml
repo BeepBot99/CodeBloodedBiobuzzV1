@@ -14,6 +14,7 @@
             <RevTouchSensor name="pollenSensor4" port="2"/>
             <AnalogInput name="pollenSensor2" port="0"/>
             <AnalogInput name="pollenSensor3" port="2"/>
+            <goBILDA5202SeriesMotor name="turret" port="3"/>
         </LynxModule>
         <LynxModule name="Expansion Hub 2" port="2">
             <goBILDA5202SeriesMotor name="frontRight" port="0"/>

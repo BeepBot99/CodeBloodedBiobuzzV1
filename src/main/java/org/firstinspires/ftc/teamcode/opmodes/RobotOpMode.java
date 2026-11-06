@@ -22,6 +22,7 @@ public abstract class RobotOpMode extends OpMode {
     protected Blocker blocker;
     protected Corbicula corbicula;
     protected Sensors sensors;
+    protected Turret turret;
     private List<LynxModule> hubs;
 
     @Override
@@ -35,6 +36,7 @@ public abstract class RobotOpMode extends OpMode {
         blocker = new Blocker(context);
         corbicula = new Corbicula(context);
         sensors = new Sensors(context);
+        turret = new Turret(context);
 
         schedule(
                 drivetrain.periodic(),
@@ -42,7 +44,8 @@ public abstract class RobotOpMode extends OpMode {
                 flywheel.periodic(),
                 blocker.periodic(),
                 corbicula.periodic(),
-                sensors.periodic()
+                sensors.periodic(),
+                turret.periodic()
         );
 
         hubs = hardwareMap.getAll(LynxModule.class);

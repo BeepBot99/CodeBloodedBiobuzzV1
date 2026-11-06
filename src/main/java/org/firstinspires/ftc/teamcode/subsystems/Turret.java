@@ -5,10 +5,11 @@ import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import dev.nextftc.telemetry.Telemetry;
+import dev.nextftc.telemetry.TelemetryTable;
 import org.firstinspires.ftc.teamcode.control.PredictiveController;
 import org.firstinspires.ftc.teamcode.util.Context;
 
-import static com.pedropathing.ivy.commands.Commands.infinite;
+import static com.pedropathing.ivy.commands.Commands.*;
 
 @Config
 public final class Turret {
@@ -51,12 +52,12 @@ public final class Turret {
         angleOffsetDegrees = angle - getRawAngleDegrees();
     }
 
-    public void off() {
-        mode = Mode.OFF;
+    public Command off() {
+        return instant(() -> mode = Mode.OFF);
     }
 
-    public void on() {
-        mode = Mode.POSITION;
+    public Command on() {
+        return instant(() -> mode = Mode.POSITION);
     }
 
     public double getTargetDegrees() {
@@ -83,11 +84,17 @@ public final class Turret {
         setAngleDegrees(angleTransfer);
     }
 
+    public Command toggle() {
+        return conditional(() -> mode == Mode.OFF, on(), off());
+    }
+    
     public Command periodic() {
         return infinite(() -> {
+            double error = targetDegrees - getAngleDegrees();
+
             switch (mode) {
                 case POSITION:
-                    motor.setPower(controller.getOutput(targetDegrees - getAngleDegrees(), motor.getVelocity()));
+                    motor.setPower(controller.getOutput(error, motor.getVelocity()));
                     break;
                 case OFF:
                     motor.setPower(0);
@@ -98,8 +105,9 @@ public final class Turret {
 
             Telemetry.log("Turret/angle", getAngleDegrees());
             Telemetry.log("Turret/target", targetDegrees);
-            Telemetry.log("Turret/error", targetDegrees - getAngleDegrees());
+            Telemetry.log("Turret/error", error);
             Telemetry.log("Turret/power", motor.getPower());
+            Telemetry.log("Turret/motor", motor.getVelocity());
             Telemetry.log("Turret/mode", mode);
         });
     }

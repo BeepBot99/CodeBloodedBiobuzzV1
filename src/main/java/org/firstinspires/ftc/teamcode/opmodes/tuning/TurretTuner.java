@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.tuning;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Utility;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import dev.nextftc.telemetry.Telemetry;
@@ -14,8 +15,7 @@ import java.util.List;
 
 import static com.pedropathing.utils.Utils.quadraticFit;
 
-@TeleOp(name = "Turret Braking Tuner", group = "Tuning")
-@Config
+@Utility(name = "Turret Braking Tuner")
 public class TurretTuner extends LinearOpMode { // is linear opmode cuz copied from pedro tuner
     public static double accelTime = 2;
     public static int trials = 12;
@@ -23,7 +23,7 @@ public class TurretTuner extends LinearOpMode { // is linear opmode cuz copied f
     public static double minPower = 0.2;
     public static double bias = 1.5; // how much it favors doing trials with higher powers
     public static double brakingPower = 0.001;
-    public static double MAX_BRAKE_TIME = 2;
+    public static double MAX_BRAKE_TIME = 1;
     private final TelemetryTable table = Telemetry.table("Turret");
     private final ElapsedTime timer = new ElapsedTime();
 
@@ -94,7 +94,7 @@ public class TurretTuner extends LinearOpMode { // is linear opmode cuz copied f
                     break;
                 }
                 case BRAKE: {
-                    if (Math.abs(currentVelocity) > 0.001 && timer.seconds() < MAX_BRAKE_TIME) {
+                    if (Math.abs(currentVelocity) > 0.001 || timer.seconds() < MAX_BRAKE_TIME) {
                         motor.setPower(-brakingPower * direction);
                         break;
                     }
@@ -102,6 +102,9 @@ public class TurretTuner extends LinearOpMode { // is linear opmode cuz copied f
                     double brakingDistance = Math.abs(currentHeading - startHeading);
 
                     velocityToBrakingDistance.add(new double[]{measuredVelocity, brakingDistance});
+
+                    table.log("measuredVel", measuredVelocity);
+                    table.log("brakingDistance", brakingDistance);
 
                     iteration++;
 
