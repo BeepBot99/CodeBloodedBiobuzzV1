@@ -1,8 +1,15 @@
 @echo off
 setlocal
+for /f "tokens=2 delims=:" %%i in ('netsh wlan show interface ^| findstr /C:" SSID"') do (
+    set "SSID=%%i"
+    goto :done
+)
+:done
+REM Remove leading spaces from the SSID variable
+if defined SSID set "SSID=%SSID:~1%"
+echo Current Wi-Fi SSID: %SSID%
 
 set ROBOT_SSID=12649-RC
-set HOME_SSID=MPS-GUEST
 
 echo ==================================
 echo Connecting to robot Wi-Fi...
