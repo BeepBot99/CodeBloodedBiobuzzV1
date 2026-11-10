@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.tuning;
+package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -31,14 +31,14 @@ public class TuningTeleOp extends RobotOpMode {
             if (gamepad1.leftBumperWasPressed()) flywheel.toggle();
             flywheel.setTarget(flywheelTarget);
 
-            if (gamepad1.right_trigger_pressed) intake.upper.on().schedule();
+            if (gamepad1.right_trigger_pressed) intake.upper.setPower(upperIntakePower).schedule();
             else intake.upper.off().schedule();
 
             if (gamepad1.left_trigger_pressed) corbicula.down();
             else corbicula.up();
 
             if (gamepad1.triangleWasPressed()) turret.toggle();
-            turret.setTargetDegrees(turretDegrees);
+            turret.setTargetDegrees(turretDegrees - Math.toDegrees(drivetrain.pose().heading()));
         });
     }
 }

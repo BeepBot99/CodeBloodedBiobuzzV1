@@ -9,7 +9,7 @@ public class CompetitionTeleOp extends RobotOpMode {
     @Override
     public void start() {
         flywheel.on();
-        intake.on().schedule();
+        intake.lower.on().schedule();
     }
 
     @Override
@@ -17,11 +17,11 @@ public class CompetitionTeleOp extends RobotOpMode {
         wrapLoop(() -> {
             drivetrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x);
 
-            if (gamepad1.right_bumper) intake.off().schedule();
-            else intake.on().schedule();
+            if (gamepad1.right_bumper || sensors.ballCount() == 4) intake.lower.off().schedule();
+            else intake.lower.on().schedule();
 
-            if (gamepad1.right_trigger_pressed) blocker.unblock();
-            else blocker.block();
+            if (gamepad1.right_trigger_pressed) intake.upper.on().schedule();
+            else intake.upper.off().schedule();
 
             if (gamepad1.left_trigger_pressed) corbicula.down();
             else corbicula.up();

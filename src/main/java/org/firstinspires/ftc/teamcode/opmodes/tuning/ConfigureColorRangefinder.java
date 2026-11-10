@@ -16,6 +16,7 @@ public class ConfigureColorRangefinder extends LinearOpMode {
             pin0 --> purple
             pin1 --> green */
         crf.setPin0Analog(ColorRangefinder.AnalogMode.DISTANCE);
+        crf.setPin1Digital(ColorRangefinder.DigitalMode.DISTANCE, 0, 40);
     }
 }
 

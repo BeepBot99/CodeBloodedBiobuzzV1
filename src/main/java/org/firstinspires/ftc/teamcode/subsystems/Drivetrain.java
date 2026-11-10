@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.ivy.Command;
+import com.pedropathing.math.Pose;
 import com.pedropathing.math.Vector2D;
 import dev.nextftc.telemetry.Telemetry;
 import dev.nextftc.telemetry.TelemetryTable;
@@ -57,12 +58,19 @@ public class Drivetrain {
         follower.update();
     }
 
+    public Pose pose() {
+        return follower.pose();
+    }
+
     public Command periodic() {
         return infinite(() -> {
             table.log("X Lock", xLock.getLockedTarget());
             table.log("Y Lock", yLock.getLockedTarget());
             table.log("Heading Lock", headingLock.getLockedTarget());
             table.log("Pose", follower.pose());
+            table.log("Pose x", follower.pose().x());
+            table.log("Pose y", follower.pose().y());
+            table.log("Pose heading (deg)", Math.toDegrees(follower.pose().heading()));
             table.log("Velocity", follower.velocity());
             table.log("Speed", follower.velocity().linSpeed());
         });

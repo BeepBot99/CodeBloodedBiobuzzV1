@@ -15,10 +15,10 @@ import static com.pedropathing.ivy.commands.Commands.*;
 @Config
 public final class Turret {
     private static final double TICKS_PER_REVOLUTION = 8192 / (38.0 / 120.0);
-    public static double minimumAngleDegrees = -90;
+    public static double minimumAngleDegrees = 0;
     public static double incrementDegrees = 2.5;
-    public static double kP = 0.0365;
-    public static double kD = 0.0014;
+    public static double kP = 0.025;
+    public static double kD = 0.0009;
     public static boolean logCurrent = false;
 
     private static double lastAngle = 0;
@@ -29,7 +29,7 @@ public final class Turret {
     private final TelemetryTable table = Telemetry.table("Turret");
 
     private double targetDegrees = 0;
-    private Mode mode = Mode.POSITION;
+    private Mode mode = Mode.OFF;
     private double angleOffsetDegrees = 0;
 
     public Turret(Context context) {
