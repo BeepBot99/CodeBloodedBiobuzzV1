@@ -16,15 +16,20 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 @Config
 public class Drivetrain {
     public static double snapAngle = 15;
+    private static Pose transferPose = null;
+    private final Follower follower;
+    private final TelemetryTable table = Telemetry.table("Drivetrain");
     public LockController headingLock = new LockController(0.05, 0.05, 0.05, 0.0644, 0.0021, true);
     public LockController xLock = new LockController(0.05, 0.05, 0.05, 0.0644, 0.0021, false);
     public LockController yLock = new LockController(0.05, 0.05, 0.05, 0.0644, 0.0021, false);
 
-    private final Follower follower;
-    private final TelemetryTable table = Telemetry.table("Drivetrain");
-
     public Drivetrain(Context context) {
         follower = Constants.create(context.hardwareMap);
+        if (transferPose != null) follower.setPose(transferPose);
+    }
+
+    public static void localize(Pose pose) {
+        transferPose = pose;
     }
 
     public void drive(double forward, double strafe, double turn) {
@@ -34,7 +39,7 @@ public class Drivetrain {
         strafe = yLock.getOutput(strafe, follower.pose().y(), follower.velocity().vy);
         turn = headingLock.getOutput(turn, follower.pose().heading(), follower.velocity().omega);
 
-        Vector2D snappedDrive = Vector2D.cartesian(strafe, forward).rotate(-follower.pose().heading());
+        Vector2D snappedDrive = Vector2D.cartesian(strafe, forward).rotate(-follower.pose().heading() - Math.PI / 2);
 
         double angle = Math.atan2(snappedDrive.y(), snappedDrive.x());
         double nearestAxis = Math.rint(angle / (Math.PI / 2)) * (Math.PI / 2);
