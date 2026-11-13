@@ -32,3 +32,7 @@ dependencies {
     testImplementation("org.codeblooded.ftcodesim:ftcodesim:0.2.1-beta")
     testImplementation("junit:junit:4.13.2")
 }
+
+configurations.configureEach {
+    resolutionStrategy.cacheChangingModulesFor(48, "hours")
+}

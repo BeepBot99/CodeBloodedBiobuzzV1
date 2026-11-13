@@ -8,10 +8,10 @@ import smile.interpolation.LinearInterpolation;
 
 @TeleOp(name = "TeleOp", group = "Competition")
 public class CompetitionTeleOp extends RobotOpMode {
-    private static final Interpolation flywheelVelocity = new LinearInterpolation(new double[]{6.15, 29.2, 53, 76.8, 103.4, 135.4}, new double[]{1860, 1780, 1730, 1730, 1780, 2020});
-    private static final Interpolation turretAngle = new LinearInterpolation(new double[]{6.15, 29.2, 53, 76.8, 103.4, 135.4}, new double[]{45, 65, 85, 113, 135, 147});
-    private static final Interpolation upperIntake = new LinearInterpolation(new double[]{6.15, 29.2, 53, 76.8, 103.4, 135.4}, new double[]{0.8, 0.7, 0.5, 0.6, 0.7, 0.5});
-    private static final Interpolation lowerIntake = new LinearInterpolation(new double[]{6.15, 29.2, 53, 76.8, 103.4, 135.4}, new double[]{1, 0.8, 0.8, 0.8, 0.8, 0.8});
+    private static final Interpolation flywheelVelocity = new LinearInterpolation(new double[]{6.15, 29.2, 53, 76.7, 103.5, 124.1}, new double[]{1810, 1710, 1680, 1670, 1780, 1950});
+    private static final Interpolation turretAngle = new LinearInterpolation(new double[]{6.15, 29.2, 53, 76.7, 103.5, 124.1}, new double[]{44, 63, 88, 113, 136, 145});
+//    private static final Interpolation upperIntake = new LinearInterpolation(new double[]{6.15, 29.2, 53, 76.8, 103.4, 135.4}, new double[]{0.8, 0.7, 0.5, 0.6, 0.7, 0.5});
+//    private static final Interpolation lowerIntake = new LinearInterpolation(new double[]{6.15, 29.2, 53, 76.8, 103.4, 135.4}, new double[]{1, 0.8, 0.8, 0.8, 0.8, 0.8});
 
     @Override
     public void start() {
@@ -30,9 +30,9 @@ public class CompetitionTeleOp extends RobotOpMode {
             turret.setTargetDegrees(turretAngle.interpolate(x) - Math.toDegrees(drivetrain.pose().heading()));
 
             if (gamepad1.right_bumper || sensors.ballCount() == 4) intake.lower.off().schedule();
-            else intake.lower.setPower(lowerIntake.interpolate(x)).schedule();
+            else intake.lower.setPower(1).schedule();
 
-            if (gamepad1.right_trigger_pressed) intake.upper.setPower(upperIntake.interpolate(x)).schedule();
+            if (gamepad1.right_trigger_pressed) intake.upper.setPower(0.5).schedule();
             else intake.upper.off().schedule();
 
             if (gamepad1.left_trigger_pressed) corbicula.down();
