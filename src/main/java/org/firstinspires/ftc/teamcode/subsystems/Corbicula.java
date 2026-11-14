@@ -11,24 +11,20 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 
 @Config
 public class Corbicula {
-    public static double upPosition = 1.0;
-    public static double downPosition = 0.0;
+    public static double upPositionLeft = 0.33;
+    public static double downPositionLeft = 0.73;
+    public static double upPositionRight = 0.81;
+    public static double downPositionRight = 0.05;
 
-    private final Servo servo1;
-    private final Servo servo2;
+    private final Servo rightServo;
+    private final Servo leftServo;
     private final TelemetryTable table = Telemetry.table("Corbicula");
     private Mode mode = Mode.UP; // may move between transition if gravity moves it
 
     public Corbicula(Context context) {
-        this.servo1 = context.servo("corbicula1");
-        this.servo2 = context.servo("corbicula2");
+        this.rightServo = context.servo("corbiculaRight");
+        this.leftServo = context.servo("corbiculaLeft");
     }
-
-    private void setPosition(double position) {
-        servo1.setPosition(position);
-        servo2.setPosition(position);
-    }
-
     public void down() {
         mode = Mode.DOWN;
     }
@@ -41,14 +37,16 @@ public class Corbicula {
         return infinite(() -> {
             switch (mode) {
                 case UP:
-                    setPosition(upPosition);
+                    rightServo.setPosition(upPositionRight);
+                    leftServo.setPosition(upPositionLeft);
                     break;
                 case DOWN:
-                    setPosition(downPosition);
+                    rightServo.setPosition(downPositionRight);
+                    leftServo.setPosition(downPositionLeft);
                     break;
             }
 
-            table.log("Position", servo1.getPosition());
+            table.log("Position", rightServo.getPosition());
             table.log("Mode", mode);
         });
     }
