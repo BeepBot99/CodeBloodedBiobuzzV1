@@ -7,6 +7,7 @@ import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import dev.nextftc.telemetry.ftc.FtcTelemetry;
 import org.firstinspires.ftc.teamcode.opmodes.RobotOpMode;
+import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 
 import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.commands.Commands.*;
@@ -49,6 +50,8 @@ public class Auto extends RobotOpMode {
 
     @Override
     public void loop() {
-        wrapLoop(() -> {});
+        wrapLoop(() -> {
+            Drivetrain.localize(drivetrain.pose());
+        });
     }
 }

@@ -7,9 +7,9 @@
             <goBILDA5202SeriesMotor name="flywheel" port="2"/>
             <goBILDA5202SeriesMotor name="turret" port="3"/>
             <OctoQuadFTC name="octoquad" port="0" bus="1"/>
-<!--            <RevColorSensorV3 name="Color" port="0" bus="3"/>-->
             <RevTouchSensor name="pollenSensor1" port="0"/>
-            <RevTouchSensor name="pollenSensor2" port="3"/>            <RevTouchSensor name="pollenSensor3" port="5"/>
+            <RevTouchSensor name="pollenSensor2" port="3"/>
+            <RevTouchSensor name="pollenSensor3" port="5"/>
             <RevTouchSensor name="pollenSensor4" port="6"/>
         </LynxModule>
         <LynxModule name="Expansion Hub 2" port="2">

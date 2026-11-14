@@ -1,9 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
+import com.pedropathing.ivy.behaviors.ConflictBehavior;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.opmodes.RobotOpMode;
 import smile.interpolation.BilinearInterpolation;
 import smile.interpolation.Interpolation2D;
+
+import static com.pedropathing.ivy.commands.Commands.instant;
+import static com.pedropathing.ivy.commands.Commands.waitMs;
 
 
 @TeleOp(name = "TeleOp", group = "Competition")
@@ -42,6 +46,7 @@ public class CompetitionTeleOp extends RobotOpMode {
         flywheel.on();
         intake.lower.on().schedule();
         turret.on();
+        turret.usePreviousStartingAngle();
     }
 
     @Override
@@ -56,9 +61,11 @@ public class CompetitionTeleOp extends RobotOpMode {
             turret.setTargetDegrees((y > 70.75 ? -turretTarget : turretTarget) - Math.toDegrees(drivetrain.pose().heading()));
 
             if (gamepad1.right_bumper /*|| sensors.hasAllBalls()*/) intake.lower.off().schedule();
-            else intake.lower.setPower(1).schedule();
+            else if (gamepad1.left_bumper) intake.lower.reverse().schedule();
+            else intake.lower.on().schedule();
 
             if (gamepad1.right_trigger_pressed) intake.upper.setPower(0.5).schedule();
+            else if (gamepad1.left_bumper) intake.upper.reverse().schedule();
             else intake.upper.off().schedule();
 
             if (gamepad1.left_trigger_pressed) corbicula.down();

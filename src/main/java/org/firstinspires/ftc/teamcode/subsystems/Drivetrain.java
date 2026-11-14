@@ -31,12 +31,16 @@ public class Drivetrain {
         if (transferPose != null) follower.setPose(transferPose);
     }
 
+    // TODO add method that uses previous drivetrain pose
+
     public static void localize(Pose pose) {
         transferPose = pose;
     }
 
     public void drive(double forward, double strafe, double turn) {
         turn = turn * turn * turn;
+        forward = forward * forward * Math.signum(forward);
+        strafe = strafe * strafe * Math.signum(strafe);
 
         forward = xLock.getOutput(forward, follower.pose().x(), follower.velocity().vx);
         strafe = yLock.getOutput(strafe, follower.pose().y(), follower.velocity().vy);
