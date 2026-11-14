@@ -68,6 +68,8 @@ public class Constants {
                 c.maxAchievableStrafeVelocity.set(70.79941311879176);
                 c.naturalForwardDeceleration.set(29.28599244245199);
                 c.naturalStrafeDeceleration.set(62.208428990072804);
+
+                //c.headingDriveRatio.set(1.0);
             }
     );
 

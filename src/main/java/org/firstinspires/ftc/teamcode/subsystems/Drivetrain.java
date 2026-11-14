@@ -19,7 +19,7 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 public class Drivetrain {
     public static double snapAngle = 15;
     private static Pose transferPose = null;
-    private final Follower follower;
+    public final Follower follower;
     private final TelemetryTable table = Telemetry.table("Drivetrain");
 
     public LockController headingLock = new LockController(3, Constants.foresightConfig.headingBrakeCoefficients.get().x(), Constants.foresightConfig.headingBrakeCoefficients.get().y(), 0.05, 0.05, true);

@@ -46,6 +46,10 @@ public class Flywheel {
         this.target = target;
     }
 
+    public boolean atTarget() {
+        return Math.abs(motor.getVelocity() - target) < 30;
+    }
+
     public Command periodic() {
         return infinite(() -> {
             switch (mode) {
