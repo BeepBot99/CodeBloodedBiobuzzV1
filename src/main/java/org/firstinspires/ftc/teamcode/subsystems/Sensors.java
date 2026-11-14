@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ivy.Command;
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import dev.nextftc.telemetry.Telemetry;
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode.util.Context;
 
 import static com.pedropathing.ivy.commands.Commands.infinite;
 
+@Config
 public class Sensors {
     private final TelemetryTable table = Telemetry.table("Sensors");
 
@@ -15,6 +17,8 @@ public class Sensors {
     private final RevTouchSensor pollenSensor4;
     private final RevTouchSensor pollenSensor2;
     private final RevTouchSensor pollenSensor3;
+    private long lastSeen4 = 0L;
+    public static int hasAllDelayMs = 100;
 
     public Sensors(Context context) {
         pollenSensor1 = context.hardwareMap.get(RevTouchSensor.class, "pollenSensor1");
@@ -25,6 +29,8 @@ public class Sensors {
 
     public Command periodic() {
         return infinite(() -> {
+            lastSeen4 = ballCount() == 4 ? System.nanoTime() : 0;
+
             table.log("Transfer/1/Active", hasBall1());
             table.log("Transfer/4/Active", hasBall2());
             table.log("Transfer/2/Active", hasBall3());
@@ -50,5 +56,9 @@ public class Sensors {
 
     public int ballCount() {
         return (hasBall1() ? 1 : 0) + (hasBall2() ? 1 : 0) + (hasBall3() ? 1 : 0) + (hasBall4() ? 1 : 0);
+    }
+
+    public boolean hasAllBalls() {
+        return ballCount() == 4 && System.nanoTime() - lastSeen4 >= hasAllDelayMs * 1e3;
     }
 }

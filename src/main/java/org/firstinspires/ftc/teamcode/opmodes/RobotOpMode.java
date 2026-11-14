@@ -19,7 +19,6 @@ public abstract class RobotOpMode extends OpMode {
     protected Drivetrain drivetrain;
     protected Intake intake;
     protected Flywheel flywheel;
-    protected Blocker blocker;
     protected Corbicula corbicula;
     protected Sensors sensors;
     protected Turret turret;
@@ -33,7 +32,6 @@ public abstract class RobotOpMode extends OpMode {
         drivetrain = new Drivetrain(context);
         intake = new Intake(context);
         flywheel = new Flywheel(context);
-        blocker = new Blocker(context);
         corbicula = new Corbicula(context);
         sensors = new Sensors(context);
         turret = new Turret(context);
@@ -42,7 +40,6 @@ public abstract class RobotOpMode extends OpMode {
                 drivetrain.periodic(),
                 intake.periodic(),
                 flywheel.periodic(),
-                blocker.periodic(),
                 corbicula.periodic(),
                 sensors.periodic(),
                 turret.periodic()

@@ -48,7 +48,7 @@ public class Simulate {
         simHardwareMap.register("lowerIntake", new SimMotor(SimMotorConfig.empty("lowerIntake")));
         simHardwareMap.register("upperIntake", new SimMotor(SimMotorConfig.empty("upperIntake")));
         simHardwareMap.register("flywheel", new SimMotor(SimMotorConfig.empty("flywheel")));
-        simHardwareMap.register("blocker", new SimServo());
+//        simHardwareMap.register("blocker", new SimServo());
         simHardwareMap.register("corbicula1", new SimServo());
         simHardwareMap.register("corbicula2", new SimServo());
         simHardwareMap.register("intake", new SimMotor(SimMotorConfig.empty("intake")));

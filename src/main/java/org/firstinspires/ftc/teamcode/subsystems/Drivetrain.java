@@ -42,7 +42,7 @@ public class Drivetrain {
         strafe = yLock.getOutput(strafe, follower.pose().y(), follower.velocity().vy);
         turn = headingLock.getOutput(turn, follower.pose().heading(), follower.velocity().omega);
 
-        Vector2D snappedDrive = Vector2D.cartesian(strafe, forward).rotate(-follower.pose().heading() - Math.PI / 2);
+        Vector2D snappedDrive = Vector2D.cartesian(strafe, forward).rotate(-follower.pose().heading() - Math.PI);
 
         double angle = Math.atan2(snappedDrive.y(), snappedDrive.x());
         double nearestAxis = Math.rint(angle / (Math.PI / 2)) * (Math.PI / 2);
