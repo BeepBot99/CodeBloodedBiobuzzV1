@@ -19,11 +19,15 @@ public class Auto extends RobotOpMode {
 
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    private final Pose start = poseFactory.of(53, 6.15, 90);
+    private final Pose start = poseFactory.of(53.2, 6.9, 90);
     private final Pose path1 = poseFactory.of(11.7185, 96.697, 90);
     private final Pose path1Control1 = poseFactory.of(22.1752, 35.8281, 0);
 
-
+    @Override
+    public void init() {
+        super.init();
+        turret.setStartingAngle(0);
+    }
 
     public Path path1() {
         return Paths.curve(start, path1Control1, path1).constant(path1);
@@ -51,6 +55,7 @@ public class Auto extends RobotOpMode {
     @Override
     public void loop() {
         wrapLoop(() -> {
+            drivetrain.follower.update();
             Drivetrain.localize(drivetrain.pose());
         });
     }

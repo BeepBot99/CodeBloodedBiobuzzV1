@@ -70,6 +70,9 @@ public class CompetitionTeleOp extends RobotOpMode {
 
             if (gamepad1.left_trigger_pressed) corbicula.down();
             else corbicula.up();
+
+            if (gamepad2.dpadLeftWasPressed()) turret.moveLeft();
+            if (gamepad2.dpadRightWasPressed()) turret.moveRight();
         });
     }
 }

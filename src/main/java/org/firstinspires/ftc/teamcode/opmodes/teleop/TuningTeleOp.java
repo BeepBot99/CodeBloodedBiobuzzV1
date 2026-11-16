@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.opmodes.RobotOpMode;
 @Config("Tuning")
 public class TuningTeleOp extends RobotOpMode {
     public static double flywheelTarget = 0;
-    public static double upperIntakePower = 1;
+    public static double upperIntakePower = 0.5;
     public static double lowerIntakePower = 1;
     public static double turretDegrees = 0;
 

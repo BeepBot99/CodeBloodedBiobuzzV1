@@ -4,6 +4,7 @@ import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.Turret;
 
 @Autonomous(name = "Bottom Left Corner", group = "Localizer")
 public class BottomLeftCorner extends LinearOpMode {
@@ -11,5 +12,6 @@ public class BottomLeftCorner extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         waitForStart();
         Drivetrain.localize(new Pose(7.28, 6.15, 0));
+        Turret.localize(0);
     }
 }

@@ -23,13 +23,18 @@ public class Auto2 extends RobotOpMode {
     private final Pose start = poseFactory.of(6.15, 141.5 - 7.28, -90);
     private final Pose path1 = poseFactory.of(12, 114, -90);
 
+    @Override
+    public void init() {
+        super.init();
+        turret.setStartingAngle(0);
+    }
 
     @Override
     public void start() {
         drivetrain.follower.setPose(start);
         schedule(
                 sequential(
-                        follow(drivetrain.follower, line(start, path1))
+                        follow(drivetrain.follower, line(start, path1).constant(3 * Math.PI / 2))
                 )
         );
     }
@@ -37,6 +42,7 @@ public class Auto2 extends RobotOpMode {
     @Override
     public void loop() {
         wrapLoop(() -> {
+            drivetrain.follower.update();
             Drivetrain.localize(drivetrain.pose());
         });
     }
