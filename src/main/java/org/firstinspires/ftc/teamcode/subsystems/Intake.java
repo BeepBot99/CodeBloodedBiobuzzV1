@@ -22,6 +22,14 @@ public final class Intake {
         upper = new IntakeShaft(context.motor("upperIntake"));
     }
 
+    public Command shoot() {
+        return sequential(upper.setPower(0.5), lower.setPower(1));
+    }
+
+    public Command intake() {
+        return sequential(upper.off(), lower.on());
+    }
+
     public Command on() {
         return sequential(upper.on(), lower.on());
     }

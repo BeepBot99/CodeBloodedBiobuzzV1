@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import dev.nextftc.telemetry.Telemetry;
+import dev.nextftc.telemetry.ftc.FtcTelemetry;
 import org.firstinspires.ftc.teamcode.opmodes.RobotOpMode;
 
 
@@ -16,6 +18,14 @@ public class TuningTeleOp extends RobotOpMode {
     @Override
     public void init() {
         super.init();
+    }
+
+    @Override
+    public void init_loop() {
+        Telemetry.log("Robot/Loop/Time (ms)", loopTimer.milliseconds());
+        loopTimer.reset();
+
+        FtcTelemetry.update();
     }
 
     @Override
@@ -38,7 +48,9 @@ public class TuningTeleOp extends RobotOpMode {
             else corbicula.up();
 
             if (gamepad1.triangleWasPressed()) turret.toggle();
-            turret.setTargetDegrees(turretDegrees - Math.toDegrees(drivetrain.pose().heading()));
+
+            if (turretDegrees != 0) turret.setTargetDegrees(turretDegrees - Math.toDegrees(drivetrain.pose().heading()));
+            else shootingController.aim(drivetrain.pose(), drivetrain.velocity());
         });
     }
 }

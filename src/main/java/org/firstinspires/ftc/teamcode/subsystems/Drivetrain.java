@@ -7,6 +7,7 @@ import com.pedropathing.ivy.Command;
 import com.pedropathing.math.Matrix;
 import com.pedropathing.math.Pose;
 import com.pedropathing.math.Vector2D;
+import com.pedropathing.math.Velocity;
 import dev.nextftc.telemetry.Telemetry;
 import dev.nextftc.telemetry.TelemetryTable;
 import org.firstinspires.ftc.teamcode.control.LockController;
@@ -22,7 +23,7 @@ public class Drivetrain {
     public final Follower follower;
     private final TelemetryTable table = Telemetry.table("Drivetrain");
 
-    public LockController headingLock = new LockController(3, Constants.foresightConfig.headingBrakeCoefficients.get().x(), Constants.foresightConfig.headingBrakeCoefficients.get().y(), 0.05, 0.05, true);
+    public LockController headingLock = new LockController(2, Constants.foresightConfig.headingBrakeCoefficients.get().x(), Constants.foresightConfig.headingBrakeCoefficients.get().y(), 0.05, 0.05, true);
     public LockController xLock = new LockController(0.2, Constants.foresightConfig.linearBrakeCoefficients.get().get(0,0), Constants.foresightConfig.quadraticBrakeCoefficients.get().get(0,0), 0.0644, 0.0021, false);
     public LockController yLock = new LockController(0.2, Constants.foresightConfig.linearBrakeCoefficients.get().get(1,1), Constants.foresightConfig.quadraticBrakeCoefficients.get().get(1,1), 0.0644, 0.0021, false);
 
@@ -72,6 +73,10 @@ public class Drivetrain {
 
     public Pose pose() {
         return follower.pose();
+    }
+
+    public Velocity velocity() {
+        return follower.velocity();
     }
 
     public Command periodic() {

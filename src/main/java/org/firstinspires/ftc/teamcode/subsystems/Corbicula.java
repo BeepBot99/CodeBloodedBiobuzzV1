@@ -11,9 +11,9 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 
 @Config
 public class Corbicula {
-    public static double upPositionLeft = 0.33;
+    public static double upPositionLeft = 0.33-0.025;
     public static double downPositionLeft = 0.73;
-    public static double upPositionRight = 0.81;
+    public static double upPositionRight = 0.81+0.02;
     public static double downPositionRight = 0.05;
 
     private final Servo rightServo;

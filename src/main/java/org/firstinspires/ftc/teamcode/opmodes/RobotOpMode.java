@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import dev.nextftc.telemetry.Telemetry;
 import dev.nextftc.telemetry.ftc.FtcTelemetry;
+import org.firstinspires.ftc.teamcode.control.ShootingController;
 import org.firstinspires.ftc.teamcode.subsystems.*;
 import org.firstinspires.ftc.teamcode.util.Context;
 
@@ -22,6 +23,7 @@ public abstract class RobotOpMode extends OpMode {
     protected Corbicula corbicula;
     protected Sensors sensors;
     protected Turret turret;
+    protected ShootingController shootingController;
     private List<LynxModule> hubs;
 
     @Override
@@ -35,6 +37,7 @@ public abstract class RobotOpMode extends OpMode {
         corbicula = new Corbicula(context);
         sensors = new Sensors(context);
         turret = new Turret(context);
+        shootingController = new ShootingController(context, turret, flywheel);
 
         schedule(
                 drivetrain.periodic(),
