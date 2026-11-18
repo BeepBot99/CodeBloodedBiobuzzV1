@@ -10,9 +10,8 @@ import org.firstinspires.ftc.teamcode.util.Context;
 
 @Config("Shooting Controller")
 public final class ShootingController {
-    public static double turningGain = 0;
     private final static Vector2D hivePosition = Vector2D.cartesian(57.7, 54.9);
-
+    public static double turningGain = 0;
     private final Context context;
     private final Turret turret;
     private final Flywheel flywheel;
@@ -28,21 +27,16 @@ public final class ShootingController {
         aim(pose, velocity);
     }
 
+    public void prepareForLocation(Pose pose) {
+        prepareForLocation(pose, Velocity.zero());
+    }
+
     public void spinUp(Pose pose) {
         flywheel.setTarget(Interpolation.getFlywheelVelocity(pose.x(), pose.y()));
     }
 
     public void aim(Pose pose, Velocity velocity) {
-        double turretAngle;
-        if (pose.y() > 70.75) {
-            turretAngle = Math.toDegrees(Math.atan2(141.5 - 54.9 - pose.y(), 57.7 - pose.x()));
-        }
-        else {
-            turretAngle = Math.toDegrees(Math.atan2(54.9 - pose.y(), 57.7 - pose.x()));
-        }
-        // lower didnt work for some reason
-        //double turretAngle = Math.toDegrees(Math.atan2(hivePosition.y() - pose.y(), hivePosition.x() - pose.x()));
-//        turret.setTargetDegrees(pose.y() > 70.75 ? -turretAngle : turretAngle - Math.toDegrees(pose.heading()) - turningGain * velocity.omega);
+        double turretAngle = Math.toDegrees(Math.atan2((pose.y() > 70.75 ? (141.5 - 54.9) : 54.9) - pose.y(), 57.7 - pose.x()));
         turret.setTargetDegrees(turretAngle - Math.toDegrees(pose.heading()) - turningGain * velocity.omega);
     }
 }

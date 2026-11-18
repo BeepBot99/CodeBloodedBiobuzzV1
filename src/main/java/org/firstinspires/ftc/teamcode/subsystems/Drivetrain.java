@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.pedropathing.controllers.Controller;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.ivy.Command;
-import com.pedropathing.math.Matrix;
+import com.pedropathing.ivy.pedro.PedroCommands;
 import com.pedropathing.math.Pose;
 import com.pedropathing.math.Vector2D;
 import com.pedropathing.math.Velocity;
+import com.pedropathing.paths.Path;
 import dev.nextftc.telemetry.Telemetry;
 import dev.nextftc.telemetry.TelemetryTable;
 import org.firstinspires.ftc.teamcode.control.LockController;
@@ -24,8 +24,8 @@ public class Drivetrain {
     private final TelemetryTable table = Telemetry.table("Drivetrain");
 
     public LockController headingLock = new LockController(2, Constants.foresightConfig.headingBrakeCoefficients.get().x(), Constants.foresightConfig.headingBrakeCoefficients.get().y(), 0.05, 0.05, true);
-    public LockController xLock = new LockController(0.2, Constants.foresightConfig.linearBrakeCoefficients.get().get(0,0), Constants.foresightConfig.quadraticBrakeCoefficients.get().get(0,0), 0.0644, 0.0021, false);
-    public LockController yLock = new LockController(0.2, Constants.foresightConfig.linearBrakeCoefficients.get().get(1,1), Constants.foresightConfig.quadraticBrakeCoefficients.get().get(1,1), 0.0644, 0.0021, false);
+    public LockController xLock = new LockController(0.2, Constants.foresightConfig.linearBrakeCoefficients.get().get(0, 0), Constants.foresightConfig.quadraticBrakeCoefficients.get().get(0, 0), 0.0644, 0.0021, false);
+    public LockController yLock = new LockController(0.2, Constants.foresightConfig.linearBrakeCoefficients.get().get(1, 1), Constants.foresightConfig.quadraticBrakeCoefficients.get().get(1, 1), 0.0644, 0.0021, false);
 
     public Drivetrain(Context context) {
         follower = Constants.create(context.hardwareMap);
@@ -77,6 +77,10 @@ public class Drivetrain {
 
     public Velocity velocity() {
         return follower.velocity();
+    }
+
+    public Command follow(Path path) {
+        return PedroCommands.follow(follower, path);
     }
 
     public Command periodic() {

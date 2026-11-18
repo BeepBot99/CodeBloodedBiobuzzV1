@@ -5,7 +5,6 @@ plugins {
 
 repositories {
     maven("https://jitpack.io/")
-    maven("https://central.sonatype.com/repository/maven-snapshots/")
 }
 
 ftc {
@@ -25,14 +24,8 @@ dependencies {
     implementation("com.github.haifengl:smile-interpolation:2.6.0") {
         exclude(group = "org.slf4j")
     }
-    implementation("dev.nextftc.v2:telemetry-ftc:0.3.1-SNAPSHOT") {
-        exclude(group = "org.slf4j")
-    }
+    implementation("dev.nextftc.v2:telemetry-ftc:0.4.0")
 
     testImplementation("org.codeblooded.ftcodesim:ftcodesim:0.2.1-beta")
     testImplementation("junit:junit:4.13.2")
-}
-
-configurations.configureEach {
-    resolutionStrategy.cacheChangingModulesFor(48, "hours")
 }

@@ -17,8 +17,7 @@
             <goBILDA5202SeriesMotor name="frontLeft" port="1"/>
             <goBILDA5202SeriesMotor name="backRight" port="2"/>
             <goBILDA5202SeriesMotor name="backLeft" port="3"/>
-            <Servo name="corbiculaRight" port="2"/>
-            <Servo name="corbiculaLeft" port="4"/>
+            <Servo name="corbicula" port="4"/>
         </LynxModule>
     </LynxUsbDevice>
 </Robot>

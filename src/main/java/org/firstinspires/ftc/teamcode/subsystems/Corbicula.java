@@ -11,20 +11,17 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 
 @Config
 public class Corbicula {
-    public static double upPositionLeft = 0.33-0.025;
-    public static double downPositionLeft = 0.73;
-    public static double upPositionRight = 0.81+0.02;
-    public static double downPositionRight = 0.05;
+    public static double upPosition = 0.22;
+    public static double downPosition = 0.635;
 
-    private final Servo rightServo;
-    private final Servo leftServo;
+    private final Servo servo;
     private final TelemetryTable table = Telemetry.table("Corbicula");
-    private Mode mode = Mode.UP; // may move between transition if gravity moves it
+    private Mode mode = Mode.UP;
 
     public Corbicula(Context context) {
-        this.rightServo = context.servo("corbiculaRight");
-        this.leftServo = context.servo("corbiculaLeft");
+        this.servo = context.servo("corbicula");
     }
+
     public void down() {
         mode = Mode.DOWN;
     }
@@ -37,16 +34,14 @@ public class Corbicula {
         return infinite(() -> {
             switch (mode) {
                 case UP:
-                    rightServo.setPosition(upPositionRight);
-                    leftServo.setPosition(upPositionLeft);
+                    servo.setPosition(upPosition);
                     break;
                 case DOWN:
-                    rightServo.setPosition(downPositionRight);
-                    leftServo.setPosition(downPositionLeft);
+                    servo.setPosition(downPosition);
                     break;
             }
 
-            table.log("Position", rightServo.getPosition());
+            table.log("Position", servo.getPosition());
             table.log("Mode", mode);
         });
     }

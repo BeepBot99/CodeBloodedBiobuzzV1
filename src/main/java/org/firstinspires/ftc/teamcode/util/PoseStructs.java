@@ -16,12 +16,12 @@ public final class PoseStructs implements OnCreateEventLoop {
     public static final PoseStructs INSTANCE = new PoseStructs();
     private static final double halfField = 141.5 / 2;
     private static final StructSchema<Pose> translationSchema = structSchema("Translation2d", b -> {
-        b.float64("x", pose -> DistanceUnit.INCH.toMeters(-pose.y() + halfField));
-        b.float64("y", pose -> DistanceUnit.INCH.toMeters(pose.x() - halfField));
+        b.float64("x", pose -> DistanceUnit.INCH.toMeters(pose.x()));
+        b.float64("y", pose -> DistanceUnit.INCH.toMeters(pose.y()));
         return null;
     });
     private static final StructSchema<Pose> headingSchema = structSchema("Rotation2d", b -> {
-        b.float64("value", pose -> pose.heading() + Math.PI / 2);
+        b.float64("value", Pose::heading);
         return null;
     });
     private static final StructSchema<Pose> poseSchema = structSchema("Pose2d", b -> {

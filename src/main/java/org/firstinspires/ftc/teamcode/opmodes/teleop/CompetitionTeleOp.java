@@ -31,7 +31,7 @@ public class CompetitionTeleOp extends RobotOpMode {
             if (!hasMoved && (Math.abs(gamepad1.left_stick_x) > 0.2 || Math.abs(gamepad1.right_stick_x) > 0.2)) {
                 hasMoved = true;
                 flywheel.on();
-                intake.lower.on().schedule();
+                intake.lower.on();
                 turret.on();
             }
 
@@ -39,13 +39,13 @@ public class CompetitionTeleOp extends RobotOpMode {
 
             shootingController.prepareForLocation(drivetrain.pose(), drivetrain.follower.velocity());
 
-            if (gamepad1.right_bumper /*|| sensors.hasAllBalls()*/) intake.lower.off().schedule();
-            else if (gamepad1.left_bumper) intake.lower.reverse().schedule();
-            else intake.lower.on().schedule();
+            if (gamepad1.right_bumper /*|| sensors.hasAllBalls()*/) intake.lower.off();
+            else if (gamepad1.left_bumper) intake.lower.reverse();
+            else intake.lower.on();
 
-            if (gamepad1.right_trigger_pressed) intake.upper.setPower(0.5).schedule();
-            else if (gamepad1.left_bumper) intake.upper.reverse().schedule();
-            else intake.upper.off().schedule();
+            if (gamepad1.right_trigger_pressed) intake.upper.on();
+            else if (gamepad1.left_bumper) intake.upper.reverse();
+            else intake.upper.off();
 
             if (gamepad1.left_trigger_pressed) corbicula.down();
             else corbicula.up();

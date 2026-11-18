@@ -14,6 +14,7 @@ public class TuningTeleOp extends RobotOpMode {
     public static double upperIntakePower = 0.5;
     public static double lowerIntakePower = 1;
     public static double turretDegrees = 0;
+    public static boolean autoAim = true;
 
     @Override
     public void init() {
@@ -34,23 +35,23 @@ public class TuningTeleOp extends RobotOpMode {
             drivetrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x);
 
             if (gamepad1.right_bumper) {
-                intake.lower.setPower(lowerIntakePower).schedule();
+                intake.lower.setPower(lowerIntakePower);
             }
-            else intake.lower.off().schedule();
+            else intake.lower.off();
 
             if (gamepad1.leftBumperWasPressed()) flywheel.toggle();
             flywheel.setTarget(flywheelTarget);
 
-            if (gamepad1.right_trigger_pressed) intake.upper.setPower(upperIntakePower).schedule();
-            else intake.upper.off().schedule();
+            if (gamepad1.right_trigger_pressed) intake.upper.setPower(upperIntakePower);
+            else intake.upper.off();
 
             if (gamepad1.left_trigger_pressed) corbicula.down();
             else corbicula.up();
 
             if (gamepad1.triangleWasPressed()) turret.toggle();
 
-            if (turretDegrees != 0) turret.setTargetDegrees(turretDegrees - Math.toDegrees(drivetrain.pose().heading()));
-            else shootingController.aim(drivetrain.pose(), drivetrain.velocity());
+            if (autoAim) shootingController.aim(drivetrain.pose(), drivetrain.velocity());
+            else turret.setTargetDegrees(turretDegrees - Math.toDegrees(drivetrain.pose().heading()));
         });
     }
 }

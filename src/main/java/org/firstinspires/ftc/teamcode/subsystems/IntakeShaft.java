@@ -1,50 +1,49 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import dev.nextftc.telemetry.TelemetryTable;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
-import static com.pedropathing.ivy.commands.Commands.instant;
-
 public class IntakeShaft {
-    DcMotorEx motor;
+    private final DcMotorEx motor;
+    private final double onPower;
+    private final TelemetryTable table;
 
-    public IntakeShaft(DcMotorEx motor) {
+    public IntakeShaft(DcMotorEx motor, double onPower, TelemetryTable table) {
         this.motor = motor;
+        this.onPower = onPower;
+        this.table = table;
 
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public Command setPower(double power) {
-        return instant(() -> motor.setPower(power)).requiring(motor);
+    public void setPower(double power) {
+        motor.setPower(power);
     }
 
-    public Command on() {
-        return setPower(1);
+    public void on() {
+        setPower(onPower);
     }
 
-    public Command off() {
-        return setPower(0);
+    public void off() {
+        setPower(0);
     }
 
-    public Command reverse() {
-        return setPower(-1);
-    }
-
-    public boolean isOn() {
-        return motor.getPower() > 0;
-    }
-
-    public boolean isReversing() {
-        return motor.getPower() > 0;
-    }
-
-    public boolean isOff() {
-        return motor.getPower() == 0;
+    public void reverse() {
+        setPower(-1);
     }
 
     public double getCurrent() {
         return motor.getCurrent(CurrentUnit.AMPS);
+    }
+
+    public void periodic(boolean logCurrent) {
+        table.log("Velocity", motor.getVelocity());
+        table.log("Power", motor.getPower());
+
+        if (logCurrent) {
+            table.log("Current", getCurrent());
+        }
     }
 }
