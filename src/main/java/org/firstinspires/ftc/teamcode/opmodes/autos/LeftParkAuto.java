@@ -17,7 +17,7 @@ public class LeftParkAuto extends RobotOpMode {
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
     private final Pose start = poseFactory.of(6.15, 141.5 - 7.28, -90);
-    private final Pose path1 = poseFactory.of(12, 114, -90);
+    private final Pose park = poseFactory.of(7, 114, -90);
 
     @Override
     public void init() {
@@ -30,7 +30,7 @@ public class LeftParkAuto extends RobotOpMode {
         drivetrain.follower.setPose(start);
         schedule(
                 sequential(
-                        follow(drivetrain.follower, line(start, path1).constant(3 * Math.PI / 2))
+                        follow(drivetrain.follower, line(start, park).constant(3 * Math.PI / 2))
                 )
         );
     }

@@ -15,6 +15,9 @@ public final class Interpolation {
                     {1800, 1720},
                     {1960, 1875}
             }
+
+            // 10.6, 5.3, 1845
+            // 11.5, 3.9
     );
 
     public static double getFlywheelVelocity(double x, double y) {
