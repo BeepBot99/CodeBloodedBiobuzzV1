@@ -41,6 +41,24 @@ public class Right2TipAuto extends RobotOpMode {
     private final Path intakeFlowerBigBackup = line(flowerIntake, flowerBackup).constant(flowerBackup);
     private final Path toThirdShoot = line(flowerIntake, shootByFlower).constant(shootByFlower);
 
+    private final Pose secondFlower = poseFactory.of(22.4893, 46.8152, 180);
+    private final Pose secondFlowerControlPoint = poseFactory.of(23.5548, 88.509, 0);
+    private final Pose intakeInSecondFlower = poseFactory.of(22.4893-7, 46.8152, 180);
+
+    // go into flower
+    private final Pose secondFlowerIntake = poseFactory.of(33.3294, 130.0429, 180);
+    private final Pose park = poseFactory.of(16.0595, 89.8941, 180);
+    private final Pose parkControlPoint = poseFactory.of(34.3363, 89.1661, 0);
+    private final Path lineUpWithSecondFlower = curve(shootByFlower, secondFlowerControlPoint, secondFlower).heading(
+            Interpolator.piecewise()
+                    .until(0.35, Interpolator.constant(shootByFlower))
+                    .until(1.0, Interpolator.constant(secondFlower))
+    );
+    private final Path intakeSecondFlower = line(secondFlower, intakeInSecondFlower).constant(intakeInSecondFlower);
+    private final Path backUpSecondFlower = line(intakeInSecondFlower, secondFlower).constant(secondFlower);
+    // 6 in
+    //private final Path parkPath = curve(shootByFlower, secondFlowerControlPoint, secondFlower).constant();
+
     @Override
     public void init() {
         super.init();
@@ -89,6 +107,17 @@ public class Right2TipAuto extends RobotOpMode {
                         drivetrain.follow(toThirdShoot),
                         waitMs(1000),
                         intake.shoot()
+
+
+//                        drivetrain.follow(lineUpWithSecondFlower),
+//                        instant(intake.lower::on),
+//                        drivetrain.follow(intakeSecondFlower).raceWith(waitMs(2000)),
+//                        waitMs(1000),
+//                        drivetrain.follow(backUpSecondFlower),
+//                        drivetrain.follow(intakeSecondFlower).raceWith(waitMs(2000)),
+//                        waitMs(1000),
+//                        drivetrain.follow(backUpSecondFlower)
+
                 )
         );
     }

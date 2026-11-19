@@ -10,7 +10,8 @@ import org.firstinspires.ftc.teamcode.util.Context;
 
 @Config("Shooting Controller")
 public final class ShootingController {
-    public static Vector2D hivePosition = Vector2D.cartesian(57.7, 54.9);
+    private static final Vector2D hivePositionRight = Vector2D.cartesian(57.7, 54.9);
+    private static final Vector2D hivePositionLeft = Vector2D.cartesian(57.7 + 1, 141.5 - 3 - 54.9);
     public static double turningGain = 0;
     private final Context context;
     private final Turret turret;
@@ -36,7 +37,8 @@ public final class ShootingController {
     }
 
     public void aim(Pose pose, Velocity velocity) {
-        double turretAngle = Math.toDegrees(Math.atan2((pose.y() > 70.75 ? (141.5 - hivePosition.y()) : hivePosition.y()) - pose.y(), hivePosition.x() - pose.x()));
+        Vector2D hivePosition = pose.y() > 70.75 ? hivePositionLeft : hivePositionRight;
+        double turretAngle = Math.toDegrees(hivePosition.minus(pose.toVector2D()).theta());
         turret.setTargetDegrees(turretAngle - Math.toDegrees(pose.heading()) - turningGain * velocity.omega);
     }
 }
