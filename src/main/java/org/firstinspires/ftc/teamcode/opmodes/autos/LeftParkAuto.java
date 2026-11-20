@@ -16,8 +16,8 @@ public class LeftParkAuto extends RobotOpMode {
 
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    private final Pose start = poseFactory.of(6.15, 141.5 - 7.28, -90);
-    private final Pose park = poseFactory.of(7, 114, -90);
+    private final Pose start = poseFactory.of(7.86, 133.4, -90);
+    private final Pose park = poseFactory.of(12, 125, -90);
 
     @Override
     public void init() {

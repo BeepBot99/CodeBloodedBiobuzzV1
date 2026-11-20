@@ -1,14 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop;
 
 import com.pedropathing.math.Pose;
-import com.pedropathing.math.Vector2D;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import dev.nextftc.telemetry.Telemetry;
 import dev.nextftc.telemetry.ftc.FtcTelemetry;
-import org.firstinspires.ftc.teamcode.control.ShootingController;
 import org.firstinspires.ftc.teamcode.opmodes.RobotOpMode;
-import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.subsystems.Turret;
 
 @TeleOp(name = "TeleOp", group = "Competition")
 public class CompetitionTeleOp extends RobotOpMode {
@@ -49,11 +45,17 @@ public class CompetitionTeleOp extends RobotOpMode {
             if (gamepad2.dpadLeftWasPressed()) turret.moveLeft();
             if (gamepad2.dpadRightWasPressed()) turret.moveRight();
 
-            if (gamepad2.dpadRightWasPressed()) {
-                Drivetrain.localize(new Pose(83.755, 5.6, Math.toDegrees(180))); // or 5.6
-                gamepad1.rumble(500);
-                gamepad2.rumble(500);
-            }
+            if (gamepad2.circleWasPressed())
+                relocalize(new Pose(83.755, 5.6, Math.toRadians(180))); // jacob used degrees like a chud
+
+            if (gamepad2.crossWasPressed())
+                relocalize(new Pose(6.15, 7.28, Math.PI / 2)); // davis used radians like a real one
         });
+    }
+
+    private void relocalize(Pose pose) {
+        drivetrain.follower.setPose(pose);
+        gamepad1.rumble(500);
+        gamepad2.rumble(500);
     }
 }
