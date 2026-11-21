@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.util.Context;
 public final class ShootingController {
     private static final Vector2D hivePositionRight = Vector2D.cartesian(57.7, 54.9);
     private static final Vector2D hivePositionLeft = Vector2D.cartesian(57.7 + 1, 141.5 - 3 - 54.9);
+    private static final int SOTM_ITERATIONS = 10;
     public static double turningGain = 0;
     private final Context context;
     private final Turret turret;
@@ -23,9 +24,24 @@ public final class ShootingController {
         this.flywheel = flywheel;
     }
 
+    private static Vector2D calculateVirtualRobot(Vector2D robotPose, Vector2D robotVelocity) {
+        if (robotVelocity.magnitude() < 1) return robotPose;
+        Vector2D virtualPose = robotPose;
+        for (int i = 0; i < SOTM_ITERATIONS; i++) {
+            double airTime = Interpolation.getAirTime(virtualPose.x(), virtualPose.y());
+            virtualPose = robotPose.plus(robotVelocity.times(airTime));
+        }
+        return virtualPose;
+    }
+
     public void prepareForLocation(Pose pose, Velocity velocity) {
         spinUp(pose);
         aim(pose, velocity);
+    }
+
+    public void prepareForLocationSotm(Pose pose, Velocity velocity) {
+        Pose virtualPose = calculateVirtualRobot(pose.toVector2D(), velocity.toVector2D()).toPose(pose.heading());
+        prepareForLocation(virtualPose, velocity);
     }
 
     public void prepareForLocation(Pose pose) {
