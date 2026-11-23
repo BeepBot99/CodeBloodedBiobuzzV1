@@ -31,11 +31,15 @@ public final class Interpolation {
     );
 
     public static double getFlywheelVelocity(double x, double y) {
-        return flywheelVelocity.interpolate(x, prepareY(y));
+        double flywheel = flywheelVelocity.interpolate(x, prepareY(y));
+        if (y > 70.5) {
+            return flywheel * 0.96;
+        }
+        return flywheel;
     }
 
     private static double prepareY(double y) {
-        return -Math.abs(y - 70.75) + 70.75;
+        return -Math.abs(y - 70.5) + 70.5;
     }
 
     public static double getAirTime(double x, double y) {

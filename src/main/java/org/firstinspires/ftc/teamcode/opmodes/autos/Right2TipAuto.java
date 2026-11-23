@@ -16,6 +16,7 @@ import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.commands.Commands.*;
 import static com.pedropathing.ivy.groups.Groups.parallel;
 import static com.pedropathing.ivy.groups.Groups.sequential;
+import static com.pedropathing.paths.interpolator.Interpolator.constant;
 
 @Autonomous(group = "Competition")
 public class Right2TipAuto extends RobotOpMode {
@@ -32,14 +33,14 @@ public class Right2TipAuto extends RobotOpMode {
             shootByFlower
     ).heading(
             Interpolator.piecewise()
-                    .until(0.2, Interpolator.constant(cornerPose))
-                    .until(1.0, Interpolator.constant(shootByFlower))
+                    .until(0.2, constant(cornerPose))
+                    .until(1.0, constant(shootByFlower))
     );
     private final Pose flowerBackup = poseFactory.of(46.5, 118, 90);
-    private final Pose flowerIntake = poseFactory.of(46.5, 125.5, 90);
+    private final Pose flowerIntake = poseFactory.of(46.5, 126.5, 90);
     private final Path intakeFlowerLittleBackup = line(shootByFlower, flowerBackup).heading(
             Interpolator.piecewise()
-                    .until(0.5, Interpolator.constant(shootByFlower))
+                    .until(0.5, constant(shootByFlower))
                     .until(1.0, Interpolator.linear(shootByFlower, flowerBackup))
     );
     private final Path intakeFlowerForward = line(flowerBackup, flowerIntake).constant(flowerIntake);
@@ -49,15 +50,17 @@ public class Right2TipAuto extends RobotOpMode {
             poseFactory.of(50, 100, 0),
             shootByFlower).heading(
                     Interpolator.piecewise()
-                            .until(0.5, Interpolator.constant(flowerIntake))
-                            .until(1.0, Interpolator.constant(shootByFlower))
+                            .until(0.5, constant(flowerIntake))
+                            .until(1.0, constant(shootByFlower))
     );
     private final Pose parkPose = poseFactory.of(14, 94, 0);
     private final Path park = curve(
             shootByFlower,
             poseFactory.of(50, 97, 0),
             parkPose
-    ).tangent();
+    ).heading(Interpolator.piecewise()
+            .until(0.3, Interpolator.tangent)
+            .until(1.0, constant(parkPose)));
 
     @Override
     public void init() {
@@ -73,7 +76,7 @@ public class Right2TipAuto extends RobotOpMode {
         schedule(
                 sequential(
                         say("i am start"),
-                        instant(() -> shootingController.prepareForLocation(start)),
+                        instant(() -> shootingController.prepareForLocationSlow(start)),
                         instant(flywheel::on),
                         waitUntil(flywheel::atTarget),
                         say("i am shoot"),

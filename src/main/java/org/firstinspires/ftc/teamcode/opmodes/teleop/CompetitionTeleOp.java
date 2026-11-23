@@ -29,7 +29,7 @@ public class CompetitionTeleOp extends RobotOpMode {
         wrapLoop(() -> {
             drivetrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, -gamepad1.right_stick_x);
 
-            shootingController.prepareForLocationSotm(drivetrain.pose(), drivetrain.follower.velocity());
+            shootingController.prepareForLocation(drivetrain.pose(), drivetrain.follower.velocity());
 
             if (gamepad1.right_bumper /*|| sensors.hasAllBalls()*/) intake.lower.off();
             else if (gamepad1.left_bumper) intake.lower.reverse();
@@ -50,6 +50,10 @@ public class CompetitionTeleOp extends RobotOpMode {
 
             if (gamepad2.crossWasPressed())
                 relocalize(new Pose(6.15, 7.28, Math.PI / 2)); // davis used radians like a real one
+
+            if (gamepad2.triangleWasPressed()) {
+                relocalize(new Pose(39.25, 79.2, 0));
+            }
         });
     }
 

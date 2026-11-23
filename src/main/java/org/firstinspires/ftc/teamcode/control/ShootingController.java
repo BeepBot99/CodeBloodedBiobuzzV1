@@ -13,7 +13,7 @@ public final class ShootingController {
     private static final Vector2D hivePositionRight = Vector2D.cartesian(57.7, 54.9);
     private static final Vector2D hivePositionLeft = Vector2D.cartesian(57.7 + 1, 141.5 - 3 - 54.9);
     private static final int SOTM_ITERATIONS = 10;
-    public static double turningGain = 0;
+    public static double turningGain = 2.4;
     private final Context context;
     private final Turret turret;
     private final Flywheel flywheel;
@@ -37,6 +37,11 @@ public final class ShootingController {
     public void prepareForLocation(Pose pose, Velocity velocity) {
         spinUp(pose);
         aim(pose, velocity);
+    }
+
+    public void prepareForLocationSlow(Pose pose) {
+        flywheel.setTarget(Interpolation.getFlywheelVelocity(pose.x(), pose.y()) - 20);
+        aim(pose, Velocity.zero());
     }
 
     public void prepareForLocationSotm(Pose pose, Velocity velocity) {
