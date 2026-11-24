@@ -620,7 +620,7 @@ class HeadingTuner extends TuningOpMode<Double> {
     private static final double POWER = 0.4;
     private static final double RUNTIME = 1.2;
     private static final int SAMPLES = 15;
-    public static double ALPHA = 18.25;
+    public static double ALPHA = 12.9; // 18.25;
 
     private double tau;
     private double K;
@@ -741,8 +741,8 @@ class ForwardBraking extends TuningOpMode<List<Double>> {
 
     private double[] POWERS;
     public double MAX_BRAKE_TIME = 7.0;
-    public int trials = 5;
-    public double maxPower = 0.7;
+    public int trials = 10;
+    public double maxPower = 1;
     public double minPower = 0.3;
     public double bias = 1.5;
     public double brakingPower = 0.001;
@@ -919,7 +919,7 @@ class StrafeBraking extends TuningOpMode<List<Double>> {
 
     private double[] POWERS;
     public double MAX_BRAKE_TIME = 7.0;
-    public  int trials = 5;
+    public int trials = 10;
     public double maxPower = 1;
     public double minPower = 0.3;
     public double bias = 1.5;

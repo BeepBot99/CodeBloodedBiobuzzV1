@@ -2,9 +2,7 @@ import org.codeblooded.ftcodesim.ascope.SeasonField;
 import org.codeblooded.ftcodesim.ascope.SourceType;
 import org.codeblooded.ftcodesim.ascope.boundaries.RobotGeometry;
 import org.codeblooded.ftcodesim.hardware.SimHardwareMap;
-import org.codeblooded.ftcodesim.hardware.devices.SimMotor;
-import org.codeblooded.ftcodesim.hardware.devices.SimMotorConfig;
-import org.codeblooded.ftcodesim.hardware.devices.SimOctoquad;
+import org.codeblooded.ftcodesim.hardware.devices.*;
 import org.codeblooded.ftcodesim.hardware.drivetrain.SimulatedDrivetrain;
 import org.codeblooded.ftcodesim.hardware.drivetrain.SimulatedMecanum;
 import org.codeblooded.ftcodesim.simulator.SimConfig;
@@ -13,6 +11,7 @@ import org.codeblooded.ftcodesim.input.DefaultKeybinds;
 import org.codeblooded.ftcodesim.simulator.FTCodeSim;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 import org.junit.Test;
+
 import java.io.IOException;
 
 public class Simulate {
@@ -35,7 +34,7 @@ public class Simulate {
         config.maxAngularVelocity = 8;
         config.field = SeasonField.BIOBUZZ;
 
-        config.robotGeometry = new RobotGeometry(18, 18, 0, 0);
+        config.robotGeometry = new RobotGeometry(6.15 * 2, 7.28 * 2, 6, 0);
         config.robotModel = SourceType.ROBOT_MECANUM_BASE;
 
         config.foresightConfig = Constants.foresightConfig;
@@ -45,13 +44,17 @@ public class Simulate {
         SimHardwareMap simHardwareMap = new SimHardwareMap();
         simHardwareMap.register(drivetrain);
         simHardwareMap.register("octoquad", new SimOctoquad(drivetrain));
-        simHardwareMap.register("lowerIntake", new SimMotor(SimMotorConfig.empty("lowerIntake")));
-        simHardwareMap.register("upperIntake", new SimMotor(SimMotorConfig.empty("upperIntake")));
-        simHardwareMap.register("flywheel", new SimMotor(SimMotorConfig.empty("flywheel")));
-//        simHardwareMap.register("blocker", new SimServo());
-        simHardwareMap.register("corbicula1", new SimServo());
-        simHardwareMap.register("corbicula2", new SimServo());
-        simHardwareMap.register("intake", new SimMotor(SimMotorConfig.empty("intake")));
+        simHardwareMap.register("pinpoint", new SimPinpoint(drivetrain));
+        simHardwareMap.register("lowerIntake", new SimMotor(SimMotorConfig.gobilda5000("lowerIntake", new SimVoltageSensor())));
+        simHardwareMap.register("upperIntake", new SimMotor(SimMotorConfig.gobilda5000("upperIntake", new SimVoltageSensor())));
+        simHardwareMap.register("flywheel", new SimMotor(SimMotorConfig.gobilda5000("flywheel", new SimVoltageSensor())));
+        simHardwareMap.register("turret", new SimMotor(SimMotorConfig.gobilda5000("turret", new SimVoltageSensor())));
+        simHardwareMap.register("blocker", new SimServo());
+        simHardwareMap.register("corbicula", new SimServo());
+        simHardwareMap.register("pollenSensor1", new SimTouchSensor());
+        simHardwareMap.register("pollenSensor2", new SimTouchSensor());
+        simHardwareMap.register("pollenSensor3", new SimTouchSensor());
+        simHardwareMap.register("pollenSensor4", new SimTouchSensor());
 
         SimConfig simConfig = new SimConfig();
         simConfig.gamepad1Keybinds = new DefaultKeybinds();

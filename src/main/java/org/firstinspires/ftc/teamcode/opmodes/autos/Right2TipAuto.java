@@ -130,7 +130,7 @@ public class Right2TipAuto extends RobotOpMode {
     public void loop() {
         wrapLoop(() -> {
             drivetrain.follower.update();
-            Drivetrain.localize(drivetrain.pose());
+            Drivetrain.setTransferPose(drivetrain.pose());
         });
     }
 }

@@ -19,13 +19,20 @@ import static com.pedropathing.ivy.commands.Commands.infinite;
 @Config
 public class Drivetrain {
     public static double snapAngle = 15;
+    public static double minTranslationalPower = 0.1;
+    public static double joystickDeadZone = 0.05;
+    public static double translationExponent = 1.5;
+    public static double minTurnPower = 0.1;
+    public static double turnExponent = 3;
+    public static double relativeDriveOffsetRadians = Math.PI / 2;
+
     private static Pose transferPose = null;
     public final Follower follower;
     private final TelemetryTable table = Telemetry.table("Drivetrain");
 
-    public LockController headingLock = new LockController(2, Constants.foresightConfig.headingBrakeCoefficients.get().x(), Constants.foresightConfig.headingBrakeCoefficients.get().y(), 0.05, 0.05, true);
-    public LockController xLock = new LockController(0.2, Constants.foresightConfig.linearBrakeCoefficients.get().get(0, 0), Constants.foresightConfig.quadraticBrakeCoefficients.get().get(0, 0), 0.0644, 0.0021, false);
-    public LockController yLock = new LockController(0.2, Constants.foresightConfig.linearBrakeCoefficients.get().get(1, 1), Constants.foresightConfig.quadraticBrakeCoefficients.get().get(1, 1), 0.0644, 0.0021, false);
+    public final LockController headingLock = new LockController(0.5, Constants.foresightConfig.headingBrakeCoefficients.get().x(), Constants.foresightConfig.headingBrakeCoefficients.get().y(), 0.05, 0.05, true);
+    public final LockController xLock = new LockController(0.2, Constants.foresightConfig.linearBrakeCoefficients.get().get(0, 0), Constants.foresightConfig.quadraticBrakeCoefficients.get().get(0, 0), 0.05, 0.05, false);
+    public final LockController yLock = new LockController(0.2, Constants.foresightConfig.linearBrakeCoefficients.get().get(1, 1), Constants.foresightConfig.quadraticBrakeCoefficients.get().get(1, 1), 0.05, 0.05, false);
 
     public Drivetrain(Context context) {
         follower = Constants.create(context.hardwareMap);
@@ -34,41 +41,74 @@ public class Drivetrain {
 
     // TODO add method that uses previous drivetrain pose
 
-    public static void localize(Pose pose) {
+    public static void setTransferPose(Pose pose) {
         transferPose = pose;
     }
 
-    public void drive(double forward, double strafe, double turn) {
-        turn = turn * turn * turn;
-        forward = forward * forward * Math.signum(forward);
-        strafe = strafe * strafe * Math.signum(strafe);
+    public void drive(double y, double x, double turn) {
+        turn = scaleInput(turn, minTurnPower, joystickDeadZone, turnExponent);
 
-        forward = xLock.getOutput(forward, follower.pose().x(), follower.velocity().vx);
-        strafe = yLock.getOutput(strafe, follower.pose().y(), follower.velocity().vy);
+        double relativeHeading = follower.pose().heading() + relativeDriveOffsetRadians;
+
+        Vector2D fieldInput = scaleTranslationInput(Vector2D.cartesian(x, y));
+        Vector2D robotInput = snapToAxis(fieldInput.rotate(-relativeHeading));
+        Vector2D fieldTranslation = robotInput.rotate(relativeHeading);
+
+        x = xLock.getOutput(fieldTranslation.x(), follower.pose().x(), follower.velocity().vx);
+        y = yLock.getOutput(fieldTranslation.y(), follower.pose().y(), follower.velocity().vy);
         turn = headingLock.getOutput(turn, follower.pose().heading(), follower.velocity().omega);
 
-        Vector2D snappedDrive = Vector2D.cartesian(strafe, forward).rotate(-follower.pose().heading() - Math.PI);
-
-        double angle = Math.atan2(snappedDrive.y(), snappedDrive.x());
-        double nearestAxis = Math.rint(angle / (Math.PI / 2)) * (Math.PI / 2);
-        double radiansToNearestAxis = Math.abs(Math.atan2(
-                Math.sin(angle - nearestAxis),
-                Math.cos(angle - nearestAxis)
-        ));
-
-        if (radiansToNearestAxis < Math.toRadians(snapAngle)) {
-            snappedDrive = Vector2D.polar(
-                    snappedDrive.magnitude(),
-                    nearestAxis
-            );
-        }
+        Vector2D robotTranslational = Vector2D.cartesian(x, y).rotate(-relativeHeading);
 
         follower.manual(
-                -snappedDrive.y(),
-                snappedDrive.x(),
+                robotTranslational.x(),
+                robotTranslational.y(),
                 turn
         );
         follower.update();
+    }
+
+    private static double scaleInput(double input, double minPower, double deadZone, double exponent) {
+        if (Math.abs(input) <= deadZone) {
+            return 0;
+        }
+
+        double normalizedInput = (Math.abs(input) - deadZone) / (1 - deadZone);
+
+        return Math.signum(input) * (
+                minPower + (1 - minPower) * Math.pow(normalizedInput, exponent)
+        );
+    }
+
+    private Vector2D scaleTranslationInput(Vector2D input) {
+        double magnitude = input.magnitude();
+
+        if (magnitude <= joystickDeadZone) {
+            return Vector2D.cartesian(0, 0);
+        }
+
+        double scaledMagnitude = scaleInput(
+                Math.min(magnitude, 1),
+                minTranslationalPower,
+                joystickDeadZone,
+                translationExponent
+        );
+
+        return Vector2D.polar(
+                scaledMagnitude,
+                input.theta()
+        );
+    }
+
+    private Vector2D snapToAxis(Vector2D vector) {
+        double angle = vector.theta();
+        double nearestAxis = Math.rint(angle / (Math.PI / 2)) * (Math.PI / 2);
+
+        if (Math.abs(angle - nearestAxis) < Math.toRadians(snapAngle)) {
+            return Vector2D.polar(vector.magnitude(), nearestAxis);
+        }
+
+        return vector;
     }
 
     public Pose pose() {

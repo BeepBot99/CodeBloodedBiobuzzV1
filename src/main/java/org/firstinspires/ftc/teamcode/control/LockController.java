@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.control;
 
 public class LockController {
     private double lockedTarget = 0;
-    private boolean decelerating = false;
+    private boolean decelerating = true;
     public double lockingInputThreshold;
     public double maximumLockingVelocity;
     public boolean enabled = false;
@@ -47,6 +47,10 @@ public class LockController {
             }
             return predictiveController.getOutput(error, velocity);
         }
+    }
+
+    public void reset() {
+        decelerating = true; // sets new lockedTarget once stopped
     }
 
     public double getLockedTarget() {

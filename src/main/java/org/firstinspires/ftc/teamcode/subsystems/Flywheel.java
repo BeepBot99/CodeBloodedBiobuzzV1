@@ -55,7 +55,7 @@ public class Flywheel {
             switch (mode) {
                 case OFF:
                     motor.setPower(0);
-                    return;
+                    break;
                 case VELOCITY:
                     double velocity = motor.getVelocity();
                     double power = kP * (target - velocity) + kV * target + kS * Math.signum(target);
