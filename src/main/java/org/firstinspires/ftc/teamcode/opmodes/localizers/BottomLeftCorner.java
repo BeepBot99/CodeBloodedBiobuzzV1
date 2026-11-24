@@ -12,6 +12,6 @@ public class BottomLeftCorner extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         waitForStart();
         Drivetrain.setTransferPose(new Pose(6.15, 7.28, Math.PI / 2));
-        Turret.localize(0);
+        Turret.setTransferAngle(0);
     }
 }

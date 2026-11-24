@@ -73,6 +73,11 @@ public abstract class RobotOpMode extends OpMode {
     }
 
     @Override
+    public void loop() {
+        wrapLoop(() -> {});
+    }
+
+    @Override
     public void stop() {
         context.close();
     }
