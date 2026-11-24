@@ -1,21 +1,25 @@
 @echo off
 setlocal
-for /f "tokens=2 delims=:" %%i in ('netsh wlan show interface ^| findstr /C:" SSID"') do (
-    set "SSID=%%i"
-    goto :done
-)
-:done
-REM Remove leading spaces from the SSID variable
-if defined SSID set "SSID=%SSID:~1%"
-echo Current Wi-Fi SSID: %SSID%
 
-set ROBOT_SSID=12649-RC
+set "ROBOT_SSID=12649-RC"
+set "WIFI_TIMEOUT=5"
+
+call :getSSID
+set "HOME_SSID=%CURRENT_SSID%"
+
+echo Current Wi-Fi SSID: %CURRENT_SSID%
 
 echo ==================================
 echo Connecting to robot Wi-Fi...
 echo ==================================
 
 call :connectWifi "%ROBOT_SSID%"
+
+if errorlevel 1 (
+    echo Deployment aborted.
+    if defined HOME_SSID call :connectWifi "%HOME_SSID%"
+    exit /b 1
+)
 
 echo.
 echo Connecting ADB...
@@ -24,48 +28,73 @@ adb connect 192.168.43.1:5555
 echo.
 echo Running Deploy Sloth...
 call gradlew.bat deploySloth
+set "DEPLOY_RESULT=%ERRORLEVEL%"
 
 echo.
 echo Disconnecting ADB...
 adb disconnect
 
-echo.
-echo ==================================
-echo Reconnecting to home Wi-Fi...
-echo ==================================
-
-call :connectWifi "%HOME_SSID%"
+if defined HOME_SSID (
+    if /i not "%HOME_SSID%"=="%ROBOT_SSID%" (
+        echo.
+        echo ==================================
+        echo Reconnecting to home Wi-Fi...
+        echo ==================================
+        call :connectWifi "%HOME_SSID%"
+        if errorlevel 1 exit /b 1
+    )
+)
 
 echo Done.
-exit /b
+exit /b %DEPLOY_RESULT%
+
+
+:getSSID
+set "CURRENT_SSID="
+
+for /f "tokens=1,* delims=:" %%a in ('netsh wlan show interfaces 2^>nul') do (
+    for /f "tokens=1" %%c in ("%%a") do (
+        if /i "%%c"=="SSID" (
+            for /f "tokens=*" %%d in ("%%b") do (
+                set "CURRENT_SSID=%%d"
+                exit /b 0
+            )
+        )
+    )
+)
+
+exit /b 0
 
 
 :connectWifi
-set SSID=%~1
+set "TARGET_SSID=%~1"
+set /a ELAPSED=0
 
-echo Waiting for "%SSID%" to appear...
+call :getSSID
 
-:waitWifi
-netsh wlan show networks mode=bssid 2>nul | findstr /C:"%SSID%" >nul
-
-if errorlevel 1 (
-    timeout /t 1 >nul
-    goto waitWifi
+if /i "%CURRENT_SSID%"=="%TARGET_SSID%" (
+    echo Already connected to "%TARGET_SSID%".
+    exit /b 0
 )
 
-echo Found "%SSID%". Connecting...
+echo Connecting to "%TARGET_SSID%"...
 
-netsh wlan connect name="%SSID%" >nul 2>nul
-
-echo Waiting for connection...
+netsh wlan connect name="%TARGET_SSID%" >nul 2>nul
 
 :waitConnection
-netsh wlan show interfaces 2>nul | findstr /C:"SSID                   : %SSID%" >nul
+call :getSSID
 
-if errorlevel 1 (
-    timeout /t 1 >nul
-    goto waitConnection
+if /i "%CURRENT_SSID%"=="%TARGET_SSID%" (
+    echo Connected to "%TARGET_SSID%".
+    exit /b 0
 )
 
-echo Connected to "%SSID%".
-exit /b
+if %ELAPSED% GEQ %WIFI_TIMEOUT% (
+    echo ERROR: Timed out connecting to "%TARGET_SSID%".
+    exit /b 1
+)
+
+ping 127.0.0.1 -n 2 >nul
+set /a ELAPSED+=1
+
+goto waitConnection
