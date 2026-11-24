@@ -13,7 +13,6 @@ import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 @Autonomous(group = "Competition")
 public class LeftParkAuto extends RobotOpMode {
-
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
     private final Pose start = poseFactory.of(7.86, 133.4, -90);
@@ -33,13 +32,5 @@ public class LeftParkAuto extends RobotOpMode {
                         follow(drivetrain.follower, line(start, park).constant(3 * Math.PI / 2))
                 )
         );
-    }
-
-    @Override
-    public void loop() {
-        wrapLoop(() -> {
-            drivetrain.follower.update();
-            Drivetrain.setTransferPose(drivetrain.pose());
-        });
     }
 }

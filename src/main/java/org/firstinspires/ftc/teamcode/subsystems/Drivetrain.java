@@ -39,8 +39,6 @@ public class Drivetrain {
         if (transferPose != null) follower.setPose(transferPose);
     }
 
-    // TODO add method that uses previous drivetrain pose
-
     public static void setTransferPose(Pose pose) {
         transferPose = pose;
     }
@@ -65,7 +63,6 @@ public class Drivetrain {
                 robotTranslational.y(),
                 turn
         );
-        follower.update();
     }
 
     private static double scaleInput(double input, double minPower, double deadZone, double exponent) {
@@ -125,6 +122,9 @@ public class Drivetrain {
 
     public Command periodic() {
         return infinite(() -> {
+            follower.update();
+            transferPose = pose();
+
             table.log("X Lock", xLock.getLockedTarget());
             table.log("Y Lock", yLock.getLockedTarget());
             table.log("Heading Lock", headingLock.getLockedTarget());

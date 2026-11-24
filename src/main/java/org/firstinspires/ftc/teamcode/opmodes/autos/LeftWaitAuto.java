@@ -33,12 +33,4 @@ public class LeftWaitAuto extends RobotOpMode {
                 )
         );
     }
-
-    @Override
-    public void loop() {
-        wrapLoop(() -> {
-            drivetrain.follower.update();
-            Drivetrain.setTransferPose(drivetrain.pose());
-        });
-    }
 }

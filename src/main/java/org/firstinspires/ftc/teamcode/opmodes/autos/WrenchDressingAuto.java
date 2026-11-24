@@ -99,12 +99,4 @@ public class WrenchDressingAuto extends RobotOpMode {
     private Command say(String something) {
         return instant(() -> telemetry.speak(something));
     }
-
-    @Override
-    public void loop() {
-        wrapLoop(() -> {
-            drivetrain.follower.update();
-            Drivetrain.setTransferPose(drivetrain.pose());
-        });
-    }
 }

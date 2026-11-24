@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.controllers.Controller;
 import com.pedropathing.ivy.Command;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import dev.nextftc.telemetry.Telemetry;
 import dev.nextftc.telemetry.TelemetryTable;
@@ -21,7 +20,7 @@ public final class Turret {
     public static double kD = 0.0009;
     public static boolean logCurrent = false;
 
-    private static double lastAngle = 0;
+    private static double transferAngle = 0;
 
     private final Controller controller = Controller.proportional(() -> kP).plus(Controller.derivative(() -> kD));
     private final DcMotorEx motor;
@@ -36,12 +35,11 @@ public final class Turret {
         this.context = context;
         motor = context.motor("turret");
 
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        usePreviousStartingAngle();
     }
 
-    public static void localize(double angle) {
-        lastAngle = angle;
+    public static void setTransferAngle(double angle) {
+        transferAngle = angle;
     }
 
     private double legalizeAngle(double angle) {
@@ -73,7 +71,7 @@ public final class Turret {
     }
 
     public void usePreviousStartingAngle() {
-        setAngleDegrees(lastAngle);
+        setAngleDegrees(transferAngle);
     }
 
     public double getTargetDegrees() {
@@ -114,14 +112,14 @@ public final class Turret {
                     break;
             }
 
-            lastAngle = current;
+            transferAngle = current;
 
             table.log("Angle", current);
             table.log("Target", targetDegrees);
             table.log("Error", error);
             table.log("Power", motor.getPower());
             table.log("Velocity", getRawDegreesPerSecond());
-            table.log("velocityFromPosition", (lastAngle - current) / context.loopTimer.seconds());
+            table.log("velocityFromPosition", (transferAngle - current) / context.loopTimer.seconds());
             table.log("Mode", mode);
 
             if (logCurrent) table.log("CurrentAMPS", motor.getCurrent(CurrentUnit.AMPS));

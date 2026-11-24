@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.opmodes.RobotOpMode;
 public class CompetitionTeleOp extends RobotOpMode {
     @Override
     public void start() {
-        turret.usePreviousStartingAngle();
         flywheel.on();
         intake.lower.on();
         turret.on();
@@ -46,10 +45,10 @@ public class CompetitionTeleOp extends RobotOpMode {
             if (gamepad2.dpadRightWasPressed()) turret.moveRight();
 
             if (gamepad2.circleWasPressed())
-                relocalize(new Pose(83.755, 5.6, Math.toRadians(180))); // jacob used degrees like a chud
+                relocalize(new Pose(83.755, 5.6, Math.PI));
 
             if (gamepad2.crossWasPressed())
-                relocalize(new Pose(6.15, 7.28, Math.PI / 2)); // davis used radians like a real one
+                relocalize(new Pose(6.15, 7.28, Math.PI / 2));
 
             if (gamepad2.triangleWasPressed()) {
                 relocalize(new Pose(39.25, 79.2, 0));
