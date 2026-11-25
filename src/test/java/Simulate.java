@@ -1,3 +1,4 @@
+import dev.nextftc.telemetry.Telemetry;
 import org.codeblooded.ftcodesim.ascope.SeasonField;
 import org.codeblooded.ftcodesim.ascope.SourceType;
 import org.codeblooded.ftcodesim.ascope.boundaries.RobotGeometry;
@@ -64,7 +65,12 @@ public class Simulate {
         simConfig.field = SeasonField.BIOBUZZ;
         simConfig.autoConfigureAscope = true;
 
+        RLOGTelemetry simBackend = new RLOGTelemetry();
+        Telemetry.getRegistry().register(simBackend);
+
         FTCodeSim sim = new FTCodeSim(simConfig);
         sim.run();
+
+        simBackend.close();
     }
 }

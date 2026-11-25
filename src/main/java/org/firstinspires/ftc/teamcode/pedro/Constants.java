@@ -65,7 +65,7 @@ public class Constants {
                 c.naturalForwardDeceleration.set(29.616247467875542);
                 c.naturalStrafeDeceleration.set(69.69103931170474);
 
-                c.headingDriveRatio.set(1.0); // makes headi
+                c.headingDriveRatio.set(1.0);
             }
     );
 
