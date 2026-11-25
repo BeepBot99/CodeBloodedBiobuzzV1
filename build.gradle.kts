@@ -26,6 +26,6 @@ dependencies {
     }
     implementation("dev.nextftc.v2:telemetry-ftc:0.4.0")
 
-    testImplementation("org.codeblooded.ftcodesim:ftcodesim:0.2.1-beta")
+    testImplementation("org.codeblooded.ftcodesim:ftcodesim:v0.3.0-beta")
     testImplementation("junit:junit:4.13.2")
 }

@@ -46,10 +46,10 @@ public class Simulate {
         simHardwareMap.register(drivetrain);
         simHardwareMap.register("octoquad", new SimOctoquad(drivetrain));
         simHardwareMap.register("pinpoint", new SimPinpoint(drivetrain));
-        simHardwareMap.register("lowerIntake", new SimMotor(SimMotorConfig.gobilda5000("lowerIntake", new SimVoltageSensor())));
-        simHardwareMap.register("upperIntake", new SimMotor(SimMotorConfig.gobilda5000("upperIntake", new SimVoltageSensor())));
-        simHardwareMap.register("flywheel", new SimMotor(SimMotorConfig.gobilda5000("flywheel", new SimVoltageSensor())));
-        simHardwareMap.register("turret", new SimMotor(SimMotorConfig.gobilda5000("turret", new SimVoltageSensor())));
+        simHardwareMap.register("lowerIntake", simHardwareMap.motor(2000));
+        simHardwareMap.register("upperIntake", simHardwareMap.motor(2000));
+        simHardwareMap.register("flywheel", simHardwareMap.motor(4000));
+        simHardwareMap.register("turret", simHardwareMap.motor(312));
         simHardwareMap.register("blocker", new SimServo());
         simHardwareMap.register("corbicula", new SimServo());
         simHardwareMap.register("pollenSensor1", new SimTouchSensor());

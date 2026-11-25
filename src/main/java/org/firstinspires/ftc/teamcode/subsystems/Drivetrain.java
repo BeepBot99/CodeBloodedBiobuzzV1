@@ -13,7 +13,6 @@ import dev.nextftc.telemetry.TelemetryTable;
 import org.firstinspires.ftc.teamcode.control.LockController;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 import org.firstinspires.ftc.teamcode.util.Context;
-import org.psilynx.psikit.core.Logger;
 
 import static com.pedropathing.ivy.commands.Commands.infinite;
 
