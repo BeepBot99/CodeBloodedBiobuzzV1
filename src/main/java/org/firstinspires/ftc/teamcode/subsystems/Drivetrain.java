@@ -13,6 +13,7 @@ import dev.nextftc.telemetry.TelemetryTable;
 import org.firstinspires.ftc.teamcode.control.LockController;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 import org.firstinspires.ftc.teamcode.util.Context;
+import org.psilynx.psikit.core.Logger;
 
 import static com.pedropathing.ivy.commands.Commands.infinite;
 
@@ -29,6 +30,7 @@ public class Drivetrain {
     private static Pose transferPose = null;
     public final Follower follower;
     private final TelemetryTable table = Telemetry.table("Drivetrain");
+    private final TelemetryTable manualDriveTable = table.table("ManualDrive");
 
     public final LockController headingLock = new LockController(0.5, Constants.foresightConfig.headingBrakeCoefficients.get().x(), Constants.foresightConfig.headingBrakeCoefficients.get().y(), 0.05, 0.05, true);
     public final LockController xLock = new LockController(0.2, Constants.foresightConfig.linearBrakeCoefficients.get().get(0, 0), Constants.foresightConfig.quadraticBrakeCoefficients.get().get(0, 0), 0.05, 0.05, false);
@@ -49,8 +51,9 @@ public class Drivetrain {
         double relativeHeading = follower.pose().heading() + relativeDriveOffsetRadians;
 
         Vector2D fieldInput = scaleTranslationInput(Vector2D.cartesian(x, y));
-        Vector2D robotInput = snapToAxis(fieldInput.rotate(-relativeHeading));
-        Vector2D fieldTranslation = robotInput.rotate(relativeHeading);
+        Vector2D unsnappedInput = fieldInput.rotate(-relativeHeading);
+        Vector2D snappedInput = snapToAxis(unsnappedInput);
+        Vector2D fieldTranslation = snappedInput.rotate(relativeHeading);
 
         x = xLock.getOutput(fieldTranslation.x(), follower.pose().x(), follower.velocity().vx);
         y = yLock.getOutput(fieldTranslation.y(), follower.pose().y(), follower.velocity().vy);
@@ -63,6 +66,24 @@ public class Drivetrain {
                 robotTranslational.y(),
                 turn
         );
+
+        manualDriveTable.log("Input/X", x);
+        manualDriveTable.log("Input/Y", y);
+        manualDriveTable.log("Input/Turn", turn);
+        manualDriveTable.log("Relative Heading (deg)", Math.toDegrees(relativeHeading));
+        manualDriveTable.log("Scaled/X", fieldInput.x());
+        manualDriveTable.log("Scaled/Y", fieldInput.y());
+        manualDriveTable.log("Scaled/Turn", turn);
+        manualDriveTable.log("Snap/Original Angle (deg)", Math.toDegrees(unsnappedInput.theta()));
+        manualDriveTable.log("Snap/Snapped Angle (deg)", Math.toDegrees(snappedInput.theta()));
+        manualDriveTable.log("Snap/X", fieldTranslation.x());
+        manualDriveTable.log("Snap/Y", fieldTranslation.y());
+        manualDriveTable.log("Output/Field/X", x);
+        manualDriveTable.log("Output/Field/Y", y);
+        manualDriveTable.log("Output/Robot/X", robotTranslational.x());
+        manualDriveTable.log("Output/Robot/Y", robotTranslational.y());
+        manualDriveTable.log("Output/Turn", turn);
+        manualDriveTable.log("Output/Magnitude", robotTranslational.magnitude());
     }
 
     private static double scaleInput(double input, double minPower, double deadZone, double exponent) {

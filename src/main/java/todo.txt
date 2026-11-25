@@ -5,3 +5,5 @@ integral term on turret
 more data points for predictive
 
 fix holding
+
+foresight sotm
