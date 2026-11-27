@@ -1,4 +1,6 @@
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import dev.nextftc.telemetry.Telemetry;
+import org.codeblooded.ftcodesim.hardware.devices.SimMotor;
 import org.codeblooded.ftcodesim.ascope.SeasonField;
 import org.codeblooded.ftcodesim.ascope.SourceType;
 import org.codeblooded.ftcodesim.ascope.boundaries.RobotGeometry;
@@ -35,7 +37,7 @@ public class Simulate {
         config.maxAngularVelocity = 8;
         config.field = SeasonField.BIOBUZZ;
 
-        config.robotGeometry = new RobotGeometry(6.15 * 2, 7.28 * 2, 6, 0);
+        config.robotGeometry = new RobotGeometry(6.15 * 2, 7.28 * 2, 0, 0);
         config.robotModel = SourceType.ROBOT_MECANUM_BASE;
 
         config.foresightConfig = Constants.foresightConfig;
@@ -49,7 +51,12 @@ public class Simulate {
         simHardwareMap.register("lowerIntake", simHardwareMap.motor(2000));
         simHardwareMap.register("upperIntake", simHardwareMap.motor(2000));
         simHardwareMap.register("flywheel", simHardwareMap.motor(4000));
-        simHardwareMap.register("turret", simHardwareMap.motor(312));
+
+        SimMotor turret = simHardwareMap.motor(50, 8192 / (38.0 / 120.0));
+        turret.setDirection(DcMotorSimple.Direction.REVERSE);
+        turret.setEncoderFollowsDirection(false);
+        turret.setLoad(1);
+        simHardwareMap.register("turret", turret);
         simHardwareMap.register("blocker", new SimServo());
         simHardwareMap.register("corbicula", new SimServo());
         simHardwareMap.register("pollenSensor1", new SimTouchSensor());
